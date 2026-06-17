@@ -391,9 +391,9 @@
       "venue": "Kansas City",
       "home": "Argentina",
       "away": "Algeria",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 3,
+      "as": 0
     },
     {
       "id": "m20",
@@ -404,9 +404,9 @@
       "venue": "SF Bay Area",
       "home": "Austria",
       "away": "Jordan",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 3,
+      "as": 1
     },
     {
       "id": "m21",
