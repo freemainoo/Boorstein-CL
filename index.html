@@ -145,6 +145,7 @@
     <div class="tab" data-v="bracket">Bracket &amp; Paths</div>
     <div class="tab" data-v="board">Leaderboard</div>
     <div class="tab" data-v="field">Field Analysis</div>
+    <div class="tab" data-v="perfect">Perfect Picks</div>
     <div class="tab" data-v="results">Enter Results</div>
   </nav>
 
@@ -265,6 +266,25 @@
       </select></h2>
     <p class="muted" style="margin-top:-4px;font-size:12.5px">Every entrant falls into a camp based on their marquee picks. Your camp is highlighted, with your rank inside it. Average = current pool score.</p>
     <div class="grid cards3" id="archetypes"></div>
+  </section>
+
+  <!-- PERFECT PICKS -->
+  <section class="view" id="v-perfect">
+    <h2 class="sec">Team results by ability group</h2>
+    <p class="muted" style="margin-top:-4px;font-size:13px">Within each of the 12 portfolio groups, how all four teams are scoring under the pool rules (groups 9–12 count 2×). 👑 = current best in the group · ● = your pick.</p>
+    <div class="grid cards3" id="ppGroups"></div>
+
+    <h2 class="sec">Live best-possible portfolio</h2>
+    <p class="muted" style="margin-top:-4px;font-size:13px">The optimal pick in every group — the highest score achievable in hindsight. Updates live as the tournament continues. <span style="color:var(--accent)">Green</span> = you nailed it; <span style="color:var(--warn)">orange</span> = you went another way.</p>
+    <div class="panel">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div class="kpi"><b id="ppPerfect">—</b><span>Perfect total</span></div>
+        <div class="kpi"><b id="ppYou">—</b><span>Your total</span></div>
+        <div class="kpi"><b id="ppGap">—</b><span>Left on table</span></div>
+        <div class="kpi"><b id="ppHits">—</b><span>Optimal picks</span></div>
+      </div>
+      <div class="chips" id="ppBest" style="margin-top:12px"></div>
+    </div>
   </section>
 
   <!-- RESULTS ENTRY -->
@@ -720,7 +740,47 @@ function renderResults(){
   }));
 }
 
-function renderAll(){ invalidateTables(); renderHeader(); renderOverview(); renderTeams(); renderBracket(); renderBoard(); renderField(); renderResults(); }
+function renderPerfectPicks(){
+  const groups=[]; let perfectTotal=0, hits=0;
+  for(let g=1; g<=12; g++){
+    const teams=DATA.contestGroups[g].map(t=>teamScore(t,MATCHES))
+      .sort((a,b)=> b.total-a.total || b.goals-a.goals || a.team.localeCompare(b.team));
+    const best=teams[0], mine=MYPICKS[g-1], hit=best.team===mine;
+    if(hit)hits++; perfectTotal+=best.total;
+    groups.push({g,teams,best,mine,hit});
+  }
+  const myTotal=portfolioScore(MYPICKS,MATCHES).total;
+  document.getElementById('ppPerfect').textContent=perfectTotal;
+  document.getElementById('ppYou').textContent=myTotal;
+  document.getElementById('ppGap').textContent=(perfectTotal-myTotal);
+  document.getElementById('ppHits').textContent=hits+'/12';
+  // module 1: per-group team results
+  document.getElementById('ppGroups').innerHTML=groups.map(gr=>{
+    const dbl=DBL_GROUPS.includes(gr.g);
+    const mineScore=gr.teams.find(t=>t.team===gr.mine);
+    return `<div class="card ${dbl?'double':''}">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <b>Ability Group ${gr.g}</b>${dbl?'<span class="tag dbl">2×</span>':''}</div>
+      <table class="grp-table" style="margin-top:8px"><tbody>${gr.teams.map((t,i)=>`
+        <tr class="${t.team===gr.mine?'grp-mine':''}">
+          <td style="width:18px">${i===0?'👑':''}</td>
+          <td>${flag(t.team)} ${t.team}${t.team===gr.mine?' ●':''}</td>
+          <td class="num bigbreak">${t.goals}g</td>
+          <td class="num"><b>${t.total}</b></td></tr>`).join('')}</tbody></table>
+      ${gr.hit
+        ? '<div class="bigbreak" style="color:var(--accent);margin-top:6px">✓ you have the optimal pick</div>'
+        : `<div class="bigbreak" style="margin-top:6px">leaving <b>${gr.best.total-(mineScore?mineScore.total:0)}</b> on the table vs your ${flag(gr.mine)} ${gr.mine}</div>`}
+    </div>`;}).join('');
+  // module 2: best-possible portfolio
+  document.getElementById('ppBest').innerHTML=groups.map(gr=>{
+    const dbl=DBL_GROUPS.includes(gr.g), mineScore=gr.teams.find(t=>t.team===gr.mine);
+    return `<div class="chip ${gr.hit?'match':'diff'} ${dbl?'dbl':''}">
+      <div class="chip-h">G${gr.g}${dbl?' · 2×':''}</div>
+      <div>${flag(gr.best.team)} ${gr.best.team}</div>
+      <div class="chip-pct">${gr.best.total} pts</div>
+      ${gr.hit?'':`<div class="chip-mine">you: ${flag(gr.mine)} ${gr.mine} (${mineScore?mineScore.total:0})</div>`}</div>`;}).join('');
+}
+function renderAll(){ invalidateTables(); renderHeader(); renderOverview(); renderTeams(); renderBracket(); renderBoard(); renderField(); renderPerfectPicks(); renderResults(); }
 
 /* ====================== NAV ====================== */
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
