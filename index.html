@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup Pick'em — Portfolio Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0b1020; --panel:#141b30; --panel2:#1b2440; --line:#27304d;
+    --txt:#e8edf7; --muted:#93a0bf; --accent:#4ade80; --accent2:#38bdf8;
+    --gold:#fbbf24; --double:#a855f7; --danger:#f87171; --warn:#fb923c;
+    --me:#22c55e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.45}
+  a{color:var(--accent2)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px 80px}
+  header{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#0b1020 80%,rgba(11,16,32,.85));border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+  .hd{max-width:1180px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .brand{font-weight:800;font-size:18px;letter-spacing:.2px}
+  .brand small{display:block;font-weight:500;color:var(--muted);font-size:12px;letter-spacing:0}
+  .kpis{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 14px;min-width:78px;text-align:center}
+  .kpi b{display:block;font-size:20px;line-height:1.1}
+  .kpi span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;width:100%;justify-content:flex-end}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--warn)}
+  .dot.live{background:var(--accent)}
+  button.btn{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}
+  button.btn:hover{border-color:var(--accent2)}
+  nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 22px}
+  .tab{padding:9px 16px;border-radius:10px;background:var(--panel);border:1px solid var(--line);cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+  .tab.active{background:var(--panel2);color:var(--txt);border-color:var(--accent)}
+  .view{display:none;animation:fade .25s}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2.sec{font-size:16px;margin:26px 0 12px;color:var(--txt);display:flex;align-items:center;gap:10px}
+  h2.sec:first-child{margin-top:0}
+  .muted{color:var(--muted)}
+  .grid{display:grid;gap:14px}
+  .cards3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .cards4{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;overflow:hidden}
+  .card.double{border-color:#5b2a86}
+  .card .flag{font-size:26px;margin-right:6px}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
+  .tag.dbl{background:rgba(168,85,247,.18);color:#d6b4ff;border:1px solid #5b2a86}
+  .tag.grp{background:rgba(56,189,248,.14);color:#9ad9f7;border:1px solid #1f4d63}
+  .tag.alive{background:rgba(74,222,128,.14);color:#9ff0bd;border:1px solid #1f5d3a}
+  .tag.out{background:rgba(248,113,113,.14);color:#f6b4b4;border:1px solid #6d2a2a}
+  .tag.warn{background:rgba(251,146,60,.15);color:#fdc28a;border:1px solid #6e4220}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none}
+  tbody tr:hover{background:var(--panel2)}
+  tr.me{background:rgba(34,197,94,.12)!important;outline:1px solid #1f5d3a}
+  tr.twin{background:rgba(251,191,36,.08)}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .bigbreak{font-size:12px;color:var(--muted)}
+  .barrow{display:flex;align-items:center;gap:10px;margin:7px 0}
+  .barrow .lbl{width:130px;font-size:13px;display:flex;align-items:center;gap:6px}
+  .barrow .track{flex:1;background:var(--panel2);border-radius:6px;height:16px;overflow:hidden}
+  .barrow .fill{height:100%;border-radius:6px}
+  .barrow .val{width:54px;text-align:right;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .grp-table th,.grp-table td{padding:5px 8px;font-size:12.5px}
+  .grp-table .pos{width:20px;color:var(--muted)}
+  .grp-mine{color:var(--accent);font-weight:700}
+  .path{display:flex;flex-direction:column;gap:8px}
+  .stage{display:flex;align-items:center;gap:10px;font-size:13px}
+  .stage .badge{min-width:62px;text-align:center;font-size:11px;font-weight:700;padding:3px 6px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+  .stage .pts{margin-left:auto;color:var(--gold);font-weight:700;font-size:12px}
+  .pill{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--panel2);border:1px solid var(--line)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:6px 0 0}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .chartbox{position:relative;height:300px}
+  .chartbox.tall{height:360px}
+  .note{font-size:13px;color:var(--muted);background:var(--panel2);border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
+  .scorein{width:38px;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:6px;padding:3px;text-align:center;font-size:13px}
+  .matchrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .matchrow .vs{color:var(--muted);font-size:11px}
+  .matchrow .md{font-size:10.5px;color:var(--muted);min-width:34px}
+  .final{color:var(--accent)}
+  .toprow{display:flex;gap:14px;flex-wrap:wrap;align-items:stretch}
+  .toprow>.panel{flex:1;min-width:280px}
+  .hl{color:var(--accent)}
+  .foot{margin-top:30px;font-size:12px;color:var(--muted);text-align:center;border-top:1px solid var(--line);padding-top:16px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  .chip{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:110px;font-size:12.5px}
+  .chip.match{border-color:#1f5d3a}
+  .chip.diff{border-color:#6e4220}
+  .chip.dbl{box-shadow:inset 0 0 0 9999px rgba(168,85,247,.06)}
+  .chip-h{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+  .chip-pct{color:var(--accent);font-weight:700;font-size:11px;margin-top:3px}
+  .chip-mine{color:var(--warn);font-size:11px;margin-top:4px;border-top:1px dashed var(--line);padding-top:3px}
+  .combo{display:flex;align-items:center;gap:10px;margin:8px 0}
+  .combo .rk{width:18px;color:var(--muted);font-weight:700;text-align:center;font-size:12px}
+  .combo .ck{flex:1;font-size:12.5px}
+  .combo .track{width:90px;background:var(--panel2);border-radius:6px;height:14px;overflow:hidden;flex:0 0 90px}
+  .combo .fill{height:100%;border-radius:6px;background:var(--accent2)}
+  .combo .cn{width:64px;text-align:right;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .combo.mine .ck{color:var(--accent);font-weight:700}
+  .combo.mine .fill{background:var(--accent)}
+  select.sel{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:13px;cursor:pointer}
+  .repstrip{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+  .repstrip span{font-size:16px;line-height:1.4;width:22px;text-align:center;border-radius:4px}
+  .repstrip span.dbl{background:rgba(168,85,247,.16)}
+  .fxlist{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+  .fx{display:flex;align-items:center;gap:8px;font-size:12px;padding:3px 0}
+  .fx .fxd{width:46px;color:var(--muted);flex:0 0 46px}
+  .fx .fxo{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fx .fxv{flex:0 0 auto;color:var(--accent2);font-size:11px;display:inline-flex;align-items:center;gap:3px}
+  .fx .fxr{flex:0 0 44px;text-align:right}
+  .ko-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .ko-strip .kob{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:12px}
+  .ko-strip .kob b{display:block;font-size:12.5px}
+  .ko-strip .kob span{color:var(--muted);font-size:11px}
+  @media(max-width:640px){.kpis{width:100%;margin-left:0}.barrow .lbl{width:104px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hd">
+    <div class="brand">⚽ Pick'em Portfolio Tracker<small id="meName">Debiche · 2026 World Cup Challenge</small></div>
+    <div class="kpis">
+      <div class="kpi"><b id="kRank">—</b><span>Rank</span></div>
+      <div class="kpi"><b id="kScore">—</b><span>Score</span></div>
+      <div class="kpi"><b id="kGoals">—</b><span>Goals</span></div>
+      <div class="kpi"><b id="kAlive">—</b><span>Teams Alive</span></div>
+      <div class="kpi"><b id="kDbl">—</b><span>From 2× Picks</span></div>
+    </div>
+    <div class="status">
+      <span class="dot" id="liveDot"></span><span id="liveTxt">loading…</span>
+      <button class="btn" id="refreshBtn">↻ Refresh</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="tabs">
+    <div class="tab active" data-v="overview">Overview</div>
+    <div class="tab" data-v="teams">My 12 Teams</div>
+    <div class="tab" data-v="bracket">Bracket &amp; Paths</div>
+    <div class="tab" data-v="board">Leaderboard</div>
+    <div class="tab" data-v="field">Field Analysis</div>
+    <div class="tab" data-v="results">Enter Results</div>
+  </nav>
+
+  <!-- OVERVIEW -->
+  <section class="view active" id="v-overview">
+    <div class="toprow">
+      <div class="panel">
+        <h2 class="sec">Where your points come from</h2>
+        <div class="chartbox"><canvas id="ptsByTeam"></canvas></div>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--double)"></i> double-points group (9–12)</span>
+          <span><i class="sw" style="background:var(--accent2)"></i> single (1–8)</span>
+        </div>
+      </div>
+      <div class="panel" style="flex:0 0 320px">
+        <h2 class="sec">Standing</h2>
+        <div id="standBox"></div>
+        <h2 class="sec" style="margin-top:18px">Tiebreaker</h2>
+        <div class="muted" style="font-size:13px">Your total-goals prediction: <b class="hl" id="tbPred">—</b><br>
+        Tournament goals so far: <b id="tbActual">—</b><br>
+        <span id="tbDelta"></span></div>
+      </div>
+    </div>
+
+    <div class="note" id="concentrationNote"></div>
+
+    <h2 class="sec">Your portfolio at a glance</h2>
+    <div class="grid cards4" id="miniCards"></div>
+  </section>
+
+  <!-- MY TEAMS -->
+  <section class="view" id="v-teams">
+    <h2 class="sec">Your 12 picks — live breakdown</h2>
+    <p class="muted" style="margin-top:-4px;font-size:13px">Points = goals + group points + finish bonus + advancement bonus, then ×2 for ability-groups 9–12. Bonuses apply once a stage completes.</p>
+    <div class="grid cards3" id="teamCards"></div>
+  </section>
+
+  <!-- BRACKET -->
+  <section class="view" id="v-bracket">
+    <h2 class="sec">Group situations &amp; routes to advance</h2>
+    <p class="muted" style="margin-top:-4px;font-size:13px">Only groups that contain at least one of your teams are shown. Your teams are highlighted. 12 group winners + 12 runners-up + 8 best 3rd-place teams reach the Round of 32.</p>
+    <div class="grid cards3" id="groupBoards"></div>
+
+    <h2 class="sec">Knockout schedule</h2>
+    <div class="panel"><div class="ko-strip" id="koStrip"></div></div>
+
+    <h2 class="sec">Knockout point ladder (per team)</h2>
+    <div class="panel">
+      <p class="muted" style="font-size:13px;margin-top:0">What each surviving round is worth to a pick. Double-group teams earn twice these values.</p>
+      <div class="grid cards3" id="ladder"></div>
+    </div>
+  </section>
+
+  <!-- LEADERBOARD -->
+  <section class="view" id="v-board">
+    <h2 class="sec">Live leaderboard <span class="pill" id="boardCount"></span></h2>
+    <p class="muted" style="margin-top:-4px;font-size:13px"><b class="hl">Live</b> is computed from current match results (the engine matches the sheet exactly). <b>Official</b> is the organizer's sheet, which updates more slowly. <span style="color:var(--gold)">Gold</span> rows share 11+ of your 12 picks; <span style="color:var(--me)">green</span> is you.</p>
+    <div class="panel" style="padding:6px 6px">
+      <table id="boardTable">
+        <thead><tr>
+          <th data-k="rank">#</th><th data-k="name">Entrant</th>
+          <th data-k="live" class="num">Live</th>
+          <th data-k="score" class="num">Official</th>
+          <th data-k="overlap" class="num">Shared</th>
+          <th data-k="goalsPred" class="num">Goals (TB)</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- FIELD -->
+  <section class="view" id="v-field">
+    <div class="toprow">
+      <div class="panel">
+        <h2 class="sec">How unique is your portfolio?</h2>
+        <div id="twinBox"></div>
+        <div class="chartbox" style="height:230px;margin-top:10px"><canvas id="overlapHist"></canvas></div>
+        <p class="muted" style="font-size:12.5px">How many entrants share exactly N of your 12 picks.</p>
+      </div>
+      <div class="panel">
+        <h2 class="sec">Pick-by-pick: are you with the crowd?</h2>
+        <p class="muted" style="font-size:12.5px;margin-top:-4px">Share of the field that made the same pick in each group. Short bars = differentiated bets.</p>
+        <div id="popBars"></div>
+      </div>
+    </div>
+    <h2 class="sec">Most popular team in each ability group</h2>
+    <div class="panel"><div id="popTable"></div></div>
+
+    <h2 class="sec">Popular portfolio builds</h2>
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+        <b>The chalk build — what the field's consensus portfolio looks like</b>
+        <span class="muted" style="font-size:12.5px" id="chalkAlign"></span>
+      </div>
+      <p class="muted" style="font-size:12.5px;margin:4px 0 0">Most-picked team in each ability group. <span style="color:var(--accent)">Green</span> = you're on the chalk; <span style="color:var(--warn)">orange</span> = you went a different way.</p>
+      <div class="chips" id="consensusBuild"></div>
+      <div class="muted" id="consensusNote" style="font-size:12.5px"></div>
+    </div>
+    <div class="toprow">
+      <div class="panel">
+        <h2 class="sec">Most popular 2× blocks <span class="tag dbl">groups 9–12</span></h2>
+        <p class="muted" style="font-size:12.5px;margin-top:-4px">The high-leverage quartet that scores double. These combos decide the pool.</p>
+        <div id="dblBlocks"></div>
+      </div>
+      <div class="panel">
+        <h2 class="sec">Most popular title pairs <span class="tag grp">groups 1–2</span></h2>
+        <p class="muted" style="font-size:12.5px;margin-top:-4px">The marquee top-tier combination entrants built around.</p>
+        <div id="titlePairs"></div>
+      </div>
+    </div>
+
+    <h2 class="sec">Build archetypes — the field's strategic camps
+      <select class="sel" id="campDim">
+        <option value="1">cluster by title pick</option>
+        <option value="2">cluster by title pair</option>
+        <option value="block">cluster by 2× block</option>
+      </select></h2>
+    <p class="muted" style="margin-top:-4px;font-size:12.5px">Every entrant falls into a camp based on their marquee picks. Your camp is highlighted, with your rank inside it. Average = current pool score.</p>
+    <div class="grid cards3" id="archetypes"></div>
+  </section>
+
+  <!-- RESULTS ENTRY -->
+  <section class="view" id="v-results">
+    <h2 class="sec">Enter / correct match results</h2>
+    <div class="note">Live scores auto-load from the sheet's totals, but match-by-match results are entered here so the bracket and per-team breakdown stay exact. Edits save in your browser. Pre-filled with results through June&nbsp;12.</div>
+    <div id="resultsList"></div>
+  </section>
+
+  <div class="foot">
+    Data: organizer Google Sheet (live) · 2026 FIFA World Cup structure · Built as a self-contained file.
+    <span id="builtAt"></span>
+  </div>
+</div>
+
+<script>
+const DATA = {"sheet": {"id": "1CAtVLI4V07gAlfaTcKehua-6HmIg-hDCHNUnXWhh5d4", "gid": "1365959132"}, "me": "Debiche", "contestGroups": {"1": ["Argentina", "England", "France", "Spain"], "2": ["Brazil", "Germany", "Netherlands", "Portugal"], "3": ["Belgium", "Colombia", "Morocco", "Norway"], "4": ["Mexico", "United States", "Uruguay", "Japan"], "5": ["Croatia", "Switzerland", "Ecuador", "Turkiye"], "6": ["Senegal", "Austria", "Paraguay", "Sweden"], "7": ["Canada", "Ivory Coast", "Czechia", "Scotland"], "8": ["Egypt", "Ghana", "Algeria", "Bosnia and Herzegovina"], "9": ["South Korea", "Australia", "Tunisia", "Iran"], "10": ["Congo DR", "Panama", "South Africa", "Saudi Arabia"], "11": ["New Zealand", "Iraq", "Qatar", "Uzbekistan"], "12": ["Cape Verde", "Haiti", "Jordan", "Curacao"]}, "realGroups": {"A": ["Mexico", "South Africa", "South Korea", "Czechia"], "B": ["Canada", "Bosnia and Herzegovina", "Qatar", "Switzerland"], "C": ["Brazil", "Morocco", "Haiti", "Scotland"], "D": ["United States", "Paraguay", "Australia", "Turkiye"], "E": ["Germany", "Curacao", "Ivory Coast", "Ecuador"], "F": ["Netherlands", "Japan", "Sweden", "Tunisia"], "G": ["Belgium", "Egypt", "Iran", "New Zealand"], "H": ["Spain", "Cape Verde", "Saudi Arabia", "Uruguay"], "I": ["France", "Senegal", "Iraq", "Norway"], "J": ["Argentina", "Algeria", "Austria", "Jordan"], "K": ["Portugal", "Congo DR", "Uzbekistan", "Colombia"], "L": ["England", "Croatia", "Ghana", "Panama"]}, "matches": [{"id": "m1", "num": 1, "grp": "A", "md": 1, "date": "Jun 11", "venue": "Mexico City", "home": "Mexico", "away": "South Africa", "status": "final", "hs": 2, "as": 0}, {"id": "m2", "num": 2, "grp": "A", "md": 1, "date": "Jun 11", "venue": "Guadalajara", "home": "South Korea", "away": "Czechia", "status": "final", "hs": 2, "as": 1}, {"id": "m3", "num": 3, "grp": "B", "md": 1, "date": "Jun 12", "venue": "Toronto", "home": "Canada", "away": "Bosnia and Herzegovina", "status": "final", "hs": 1, "as": 1}, {"id": "m4", "num": 4, "grp": "D", "md": 1, "date": "Jun 12", "venue": "Los Angeles", "home": "United States", "away": "Paraguay", "status": "final", "hs": 4, "as": 1}, {"id": "m5", "num": 5, "grp": "C", "md": 1, "date": "Jun 13", "venue": "Boston", "home": "Haiti", "away": "Scotland", "status": "final", "hs": 0, "as": 1}, {"id": "m6", "num": 6, "grp": "D", "md": 1, "date": "Jun 14", "venue": "Vancouver", "home": "Australia", "away": "Turkiye", "status": "final", "hs": 2, "as": 0}, {"id": "m7", "num": 7, "grp": "C", "md": 1, "date": "Jun 13", "venue": "New York NJ", "home": "Brazil", "away": "Morocco", "status": "final", "hs": 1, "as": 1}, {"id": "m8", "num": 8, "grp": "B", "md": 1, "date": "Jun 13", "venue": "SF Bay Area", "home": "Qatar", "away": "Switzerland", "status": "final", "hs": 1, "as": 1}, {"id": "m9", "num": 9, "grp": "E", "md": 1, "date": "Jun 14", "venue": "Philadelphia", "home": "Ivory Coast", "away": "Ecuador", "status": "final", "hs": 1, "as": 0}, {"id": "m10", "num": 10, "grp": "E", "md": 1, "date": "Jun 14", "venue": "Houston", "home": "Germany", "away": "Curacao", "status": "final", "hs": 7, "as": 1}, {"id": "m11", "num": 11, "grp": "F", "md": 1, "date": "Jun 14", "venue": "Dallas", "home": "Netherlands", "away": "Japan", "status": "final", "hs": 2, "as": 2}, {"id": "m12", "num": 12, "grp": "F", "md": 1, "date": "Jun 14", "venue": "Monterrey", "home": "Sweden", "away": "Tunisia", "status": "scheduled", "hs": null, "as": null}, {"id": "m13", "num": 13, "grp": "H", "md": 1, "date": "Jun 15", "venue": "Miami", "home": "Saudi Arabia", "away": "Uruguay", "status": "scheduled", "hs": null, "as": null}, {"id": "m14", "num": 14, "grp": "H", "md": 1, "date": "Jun 15", "venue": "Atlanta", "home": "Spain", "away": "Cape Verde", "status": "scheduled", "hs": null, "as": null}, {"id": "m15", "num": 15, "grp": "G", "md": 1, "date": "Jun 15", "venue": "Los Angeles", "home": "Iran", "away": "New Zealand", "status": "scheduled", "hs": null, "as": null}, {"id": "m16", "num": 16, "grp": "G", "md": 1, "date": "Jun 15", "venue": "Seattle", "home": "Belgium", "away": "Egypt", "status": "scheduled", "hs": null, "as": null}, {"id": "m17", "num": 17, "grp": "I", "md": 1, "date": "Jun 16", "venue": "New York NJ", "home": "France", "away": "Senegal", "status": "scheduled", "hs": null, "as": null}, {"id": "m18", "num": 18, "grp": "I", "md": 1, "date": "Jun 16", "venue": "Boston", "home": "Iraq", "away": "Norway", "status": "scheduled", "hs": null, "as": null}, {"id": "m19", "num": 19, "grp": "J", "md": 1, "date": "Jun 16", "venue": "Kansas City", "home": "Argentina", "away": "Algeria", "status": "scheduled", "hs": null, "as": null}, {"id": "m20", "num": 20, "grp": "J", "md": 1, "date": "Jun 16", "venue": "SF Bay Area", "home": "Austria", "away": "Jordan", "status": "scheduled", "hs": null, "as": null}, {"id": "m21", "num": 21, "grp": "L", "md": 1, "date": "Jun 17", "venue": "Toronto", "home": "Ghana", "away": "Panama", "status": "scheduled", "hs": null, "as": null}, {"id": "m22", "num": 22, "grp": "L", "md": 1, "date": "Jun 17", "venue": "Dallas", "home": "England", "away": "Croatia", "status": "scheduled", "hs": null, "as": null}, {"id": "m23", "num": 23, "grp": "K", "md": 1, "date": "Jun 17", "venue": "Houston", "home": "Portugal", "away": "Congo DR", "status": "scheduled", "hs": null, "as": null}, {"id": "m24", "num": 24, "grp": "K", "md": 1, "date": "Jun 17", "venue": "Mexico City", "home": "Uzbekistan", "away": "Colombia", "status": "scheduled", "hs": null, "as": null}, {"id": "m25", "num": 25, "grp": "A", "md": 2, "date": "Jun 18", "venue": "Atlanta", "home": "Czechia", "away": "South Africa", "status": "scheduled", "hs": null, "as": null}, {"id": "m26", "num": 26, "grp": "B", "md": 2, "date": "Jun 18", "venue": "Los Angeles", "home": "Switzerland", "away": "Bosnia and Herzegovina", "status": "scheduled", "hs": null, "as": null}, {"id": "m27", "num": 27, "grp": "B", "md": 2, "date": "Jun 18", "venue": "Vancouver", "home": "Canada", "away": "Qatar", "status": "scheduled", "hs": null, "as": null}, {"id": "m28", "num": 28, "grp": "A", "md": 2, "date": "Jun 18", "venue": "Guadalajara", "home": "Mexico", "away": "South Korea", "status": "scheduled", "hs": null, "as": null}, {"id": "m29", "num": 29, "grp": "C", "md": 2, "date": "Jun 19", "venue": "Philadelphia", "home": "Brazil", "away": "Haiti", "status": "scheduled", "hs": null, "as": null}, {"id": "m30", "num": 30, "grp": "C", "md": 2, "date": "Jun 19", "venue": "Boston", "home": "Scotland", "away": "Morocco", "status": "scheduled", "hs": null, "as": null}, {"id": "m31", "num": 31, "grp": "D", "md": 2, "date": "Jun 19", "venue": "SF Bay Area", "home": "Turkiye", "away": "Paraguay", "status": "scheduled", "hs": null, "as": null}, {"id": "m32", "num": 32, "grp": "D", "md": 2, "date": "Jun 19", "venue": "Seattle", "home": "United States", "away": "Australia", "status": "scheduled", "hs": null, "as": null}, {"id": "m33", "num": 33, "grp": "E", "md": 2, "date": "Jun 20", "venue": "Toronto", "home": "Germany", "away": "Ivory Coast", "status": "scheduled", "hs": null, "as": null}, {"id": "m34", "num": 34, "grp": "E", "md": 2, "date": "Jun 20", "venue": "Kansas City", "home": "Ecuador", "away": "Curacao", "status": "scheduled", "hs": null, "as": null}, {"id": "m35", "num": 35, "grp": "F", "md": 2, "date": "Jun 20", "venue": "Houston", "home": "Netherlands", "away": "Sweden", "status": "scheduled", "hs": null, "as": null}, {"id": "m36", "num": 36, "grp": "F", "md": 2, "date": "Jun 20", "venue": "Monterrey", "home": "Tunisia", "away": "Japan", "status": "scheduled", "hs": null, "as": null}, {"id": "m37", "num": 37, "grp": "H", "md": 2, "date": "Jun 21", "venue": "Miami", "home": "Uruguay", "away": "Cape Verde", "status": "scheduled", "hs": null, "as": null}, {"id": "m38", "num": 38, "grp": "H", "md": 2, "date": "Jun 21", "venue": "Atlanta", "home": "Spain", "away": "Saudi Arabia", "status": "scheduled", "hs": null, "as": null}, {"id": "m39", "num": 39, "grp": "G", "md": 2, "date": "Jun 21", "venue": "Los Angeles", "home": "Belgium", "away": "Iran", "status": "scheduled", "hs": null, "as": null}, {"id": "m40", "num": 40, "grp": "G", "md": 2, "date": "Jun 21", "venue": "Vancouver", "home": "New Zealand", "away": "Egypt", "status": "scheduled", "hs": null, "as": null}, {"id": "m41", "num": 41, "grp": "I", "md": 2, "date": "Jun 22", "venue": "New York NJ", "home": "Norway", "away": "Senegal", "status": "scheduled", "hs": null, "as": null}, {"id": "m42", "num": 42, "grp": "I", "md": 2, "date": "Jun 22", "venue": "Philadelphia", "home": "France", "away": "Iraq", "status": "scheduled", "hs": null, "as": null}, {"id": "m43", "num": 43, "grp": "J", "md": 2, "date": "Jun 22", "venue": "Dallas", "home": "Argentina", "away": "Austria", "status": "scheduled", "hs": null, "as": null}, {"id": "m44", "num": 44, "grp": "J", "md": 2, "date": "Jun 23", "venue": "SF Bay Area", "home": "Jordan", "away": "Algeria", "status": "scheduled", "hs": null, "as": null}, {"id": "m45", "num": 45, "grp": "L", "md": 2, "date": "Jun 23", "venue": "Boston", "home": "England", "away": "Ghana", "status": "scheduled", "hs": null, "as": null}, {"id": "m46", "num": 46, "grp": "L", "md": 2, "date": "Jun 23", "venue": "Toronto", "home": "Panama", "away": "Croatia", "status": "scheduled", "hs": null, "as": null}, {"id": "m47", "num": 47, "grp": "K", "md": 2, "date": "Jun 23", "venue": "Houston", "home": "Portugal", "away": "Uzbekistan", "status": "scheduled", "hs": null, "as": null}, {"id": "m48", "num": 48, "grp": "K", "md": 2, "date": "Jun 23", "venue": "Guadalajara", "home": "Congo DR", "away": "Colombia", "status": "scheduled", "hs": null, "as": null}, {"id": "m49", "num": 49, "grp": "C", "md": 3, "date": "Jun 24", "venue": "Miami", "home": "Scotland", "away": "Brazil", "status": "scheduled", "hs": null, "as": null}, {"id": "m50", "num": 50, "grp": "C", "md": 3, "date": "Jun 24", "venue": "Atlanta", "home": "Morocco", "away": "Haiti", "status": "scheduled", "hs": null, "as": null}, {"id": "m51", "num": 51, "grp": "B", "md": 3, "date": "Jun 24", "venue": "Vancouver", "home": "Switzerland", "away": "Canada", "status": "scheduled", "hs": null, "as": null}, {"id": "m52", "num": 52, "grp": "B", "md": 3, "date": "Jun 24", "venue": "Seattle", "home": "Bosnia and Herzegovina", "away": "Qatar", "status": "scheduled", "hs": null, "as": null}, {"id": "m53", "num": 53, "grp": "A", "md": 3, "date": "Jun 24", "venue": "Mexico City", "home": "Czechia", "away": "Mexico", "status": "scheduled", "hs": null, "as": null}, {"id": "m54", "num": 54, "grp": "A", "md": 3, "date": "Jun 24", "venue": "Monterrey", "home": "South Africa", "away": "South Korea", "status": "scheduled", "hs": null, "as": null}, {"id": "m55", "num": 55, "grp": "E", "md": 3, "date": "Jun 25", "venue": "Philadelphia", "home": "Curacao", "away": "Ivory Coast", "status": "scheduled", "hs": null, "as": null}, {"id": "m56", "num": 56, "grp": "E", "md": 3, "date": "Jun 25", "venue": "New York NJ", "home": "Ecuador", "away": "Germany", "status": "scheduled", "hs": null, "as": null}, {"id": "m57", "num": 57, "grp": "F", "md": 3, "date": "Jun 25", "venue": "Dallas", "home": "Japan", "away": "Sweden", "status": "scheduled", "hs": null, "as": null}, {"id": "m58", "num": 58, "grp": "F", "md": 3, "date": "Jun 25", "venue": "Kansas City", "home": "Netherlands", "away": "Tunisia", "status": "scheduled", "hs": null, "as": null}, {"id": "m59", "num": 59, "grp": "D", "md": 3, "date": "Jun 25", "venue": "Los Angeles", "home": "Turkiye", "away": "United States", "status": "scheduled", "hs": null, "as": null}, {"id": "m60", "num": 60, "grp": "D", "md": 3, "date": "Jun 25", "venue": "SF Bay Area", "home": "Paraguay", "away": "Australia", "status": "scheduled", "hs": null, "as": null}, {"id": "m61", "num": 61, "grp": "I", "md": 3, "date": "Jun 26", "venue": "Boston", "home": "Norway", "away": "France", "status": "scheduled", "hs": null, "as": null}, {"id": "m62", "num": 62, "grp": "I", "md": 3, "date": "Jun 26", "venue": "Toronto", "home": "Senegal", "away": "Iraq", "status": "scheduled", "hs": null, "as": null}, {"id": "m63", "num": 63, "grp": "G", "md": 3, "date": "Jun 26", "venue": "Seattle", "home": "Egypt", "away": "Iran", "status": "scheduled", "hs": null, "as": null}, {"id": "m64", "num": 64, "grp": "G", "md": 3, "date": "Jun 26", "venue": "Vancouver", "home": "New Zealand", "away": "Belgium", "status": "scheduled", "hs": null, "as": null}, {"id": "m65", "num": 65, "grp": "H", "md": 3, "date": "Jun 26", "venue": "Houston", "home": "Cape Verde", "away": "Saudi Arabia", "status": "scheduled", "hs": null, "as": null}, {"id": "m66", "num": 66, "grp": "H", "md": 3, "date": "Jun 26", "venue": "Guadalajara", "home": "Uruguay", "away": "Spain", "status": "scheduled", "hs": null, "as": null}, {"id": "m67", "num": 67, "grp": "L", "md": 3, "date": "Jun 27", "venue": "New York NJ", "home": "Panama", "away": "England", "status": "scheduled", "hs": null, "as": null}, {"id": "m68", "num": 68, "grp": "L", "md": 3, "date": "Jun 27", "venue": "Philadelphia", "home": "Croatia", "away": "Ghana", "status": "scheduled", "hs": null, "as": null}, {"id": "m69", "num": 69, "grp": "J", "md": 3, "date": "Jun 27", "venue": "Kansas City", "home": "Algeria", "away": "Austria", "status": "scheduled", "hs": null, "as": null}, {"id": "m70", "num": 70, "grp": "J", "md": 3, "date": "Jun 27", "venue": "Dallas", "home": "Jordan", "away": "Argentina", "status": "scheduled", "hs": null, "as": null}, {"id": "m71", "num": 71, "grp": "K", "md": 3, "date": "Jun 27", "venue": "Miami", "home": "Colombia", "away": "Portugal", "status": "scheduled", "hs": null, "as": null}, {"id": "m72", "num": 72, "grp": "K", "md": 3, "date": "Jun 27", "venue": "Atlanta", "home": "Congo DR", "away": "Uzbekistan", "status": "scheduled", "hs": null, "as": null}], "koSchedule": [{"round": "Round of 32", "dates": "Jun 28 – Jul 3"}, {"round": "Round of 16", "dates": "Jul 4 – Jul 7"}, {"round": "Quarter-finals", "dates": "Jul 9 – Jul 11"}, {"round": "Semi-finals", "dates": "Jul 14 – Jul 15"}, {"round": "Third place", "dates": "Jul 18"}, {"round": "Final", "dates": "Jul 19  ·  MetLife Stadium, NY/NJ"}], "entrants": [{"name": "Falcon", "picks": ["Argentina", "Brazil", "Belgium", "Mexico", "Croatia", "Austria", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 272, "sheetScore": 15}, {"name": "Rykowski", "picks": ["Argentina", "Brazil", "Belgium", "Mexico", "Croatia", "Paraguay", "Ivory Coast", "Ghana", "Australia", "Panama", "Iraq", "Haiti"], "goalsPred": 125, "sheetScore": 5}, {"name": "Tracy", "picks": ["Argentina", "Brazil", "Belgium", "United States", "Croatia", "Paraguay", "Scotland", "Egypt", "Australia", "Saudi Arabia", "Qatar", "Haiti"], "goalsPred": 240, "sheetScore": 0}, {"name": "Price Fasig", "picks": ["Argentina", "Brazil", "Colombia", "Mexico", "Croatia", "Austria", "Czechia", "Algeria", "Australia", "South Africa", "New Zealand", "Curacao"], "goalsPred": 170, "sheetScore": 6}, {"name": "Park", "picks": ["Argentina", "Brazil", "Colombia", "Mexico", "Croatia", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Congo DR", "Iraq", "Jordan"], "goalsPred": 180, "sheetScore": 15}, {"name": "Shafroth Ti.", "picks": ["Argentina", "Brazil", "Colombia", "United States", "Switzerland", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "Qatar", "Cape Verde"], "goalsPred": 300, "sheetScore": 10}, {"name": "Spunberg J.", "picks": ["Argentina", "Brazil", "Colombia", "United States", "Switzerland", "Sweden", "Canada", "Ghana", "Tunisia", "South Africa", "New Zealand", "Haiti"], "goalsPred": 95, "sheetScore": 0}, {"name": "Kuhn", "picks": ["Argentina", "Brazil", "Colombia", "Uruguay", "Croatia", "Senegal", "Ivory Coast", "Egypt", "South Korea", "South Africa", "Qatar", "Jordan"], "goalsPred": 264, "sheetScore": 10}, {"name": "Zevallos J.", "picks": ["Argentina", "Brazil", "Colombia", "Uruguay", "Ecuador", "Austria", "Ivory Coast", "Ghana", "South Korea", "Congo DR", "Qatar", "Cape Verde"], "goalsPred": 295, "sheetScore": 10}, {"name": "Petersen", "picks": ["Argentina", "Brazil", "Norway", "United States", "Turkiye", "Sweden", "Canada", "Algeria", "South Korea", "South Africa", "New Zealand", "Haiti"], "goalsPred": 301, "sheetScore": 10}, {"name": "Lundin", "picks": ["Argentina", "Germany", "Colombia", "United States", "Croatia", "Senegal", "Canada", "Ghana", "Tunisia", "South Africa", "New Zealand", "Curacao"], "goalsPred": 164, "sheetScore": 0}, {"name": "Pacheco", "picks": ["Argentina", "Germany", "Colombia", "Uruguay", "Ecuador", "Senegal", "Ivory Coast", "Ghana", "South Korea", "South Africa", "New Zealand", "Curacao"], "goalsPred": 205, "sheetScore": 10}, {"name": "Lalji", "picks": ["Argentina", "Germany", "Morocco", "Uruguay", "Croatia", "Sweden", "Ivory Coast", "Ghana", "Iran", "South Africa", "New Zealand", "Curacao"], "goalsPred": 278, "sheetScore": 0}, {"name": "Hackney", "picks": ["Argentina", "Germany", "Norway", "Mexico", "Turkiye", "Austria", "Ivory Coast", "Bosnia and Herzegovina", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 286, "sheetScore": 15}, {"name": "Obermuller E.", "picks": ["Argentina", "Germany", "Norway", "United States", "Croatia", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Curacao"], "goalsPred": 78, "sheetScore": 10}, {"name": "Loew B.", "picks": ["Argentina", "Netherlands", "Belgium", "United States", "Croatia", "Sweden", "Canada", "Egypt", "South Korea", "Congo DR", "Qatar", "Curacao"], "goalsPred": 281, "sheetScore": 10}, {"name": "Aljoe", "picks": ["Argentina", "Netherlands", "Colombia", "Japan", "Ecuador", "Austria", "Czechia", "Bosnia and Herzegovina", "South Korea", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 234, "sheetScore": 11}, {"name": "Fitzgerald", "picks": ["Argentina", "Netherlands", "Colombia", "Mexico", "Switzerland", "Sweden", "Canada", "Algeria", "Iran", "South Africa", "New Zealand", "Cape Verde"], "goalsPred": 287, "sheetScore": 5}, {"name": "Greene G.", "picks": ["Argentina", "Netherlands", "Norway", "Uruguay", "Switzerland", "Sweden", "Czechia", "Egypt", "South Korea", "South Africa", "New Zealand", "Curacao"], "goalsPred": 387, "sheetScore": 11}, {"name": "Blackmon", "picks": ["Argentina", "Portugal", "Belgium", "Mexico", "Switzerland", "Senegal", "Scotland", "Bosnia and Herzegovina", "Tunisia", "Saudi Arabia", "New Zealand", "Curacao"], "goalsPred": 307, "sheetScore": 5}, {"name": "Shafroth B.", "picks": ["Argentina", "Portugal", "Belgium", "United States", "Croatia", "Senegal", "Czechia", "Bosnia and Herzegovina", "Australia", "South Africa", "New Zealand", "Haiti"], "goalsPred": 370, "sheetScore": 1}, {"name": "Meza", "picks": ["Argentina", "Portugal", "Colombia", "Mexico", "Croatia", "Paraguay", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Qatar", "Curacao"], "goalsPred": 402, "sheetScore": 15}, {"name": "Gaffney", "picks": ["England", "Brazil", "Belgium", "Japan", "Croatia", "Paraguay", "Ivory Coast", "Egypt", "South Korea", "Congo DR", "Qatar", "Jordan"], "goalsPred": 288, "sheetScore": 10}, {"name": "Barth", "picks": ["England", "Brazil", "Belgium", "United States", "Croatia", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Congo DR", "New Zealand", "Curacao"], "goalsPred": 320, "sheetScore": 10}, {"name": "Schad", "picks": ["England", "Brazil", "Colombia", "Mexico", "Croatia", "Paraguay", "Czechia", "Algeria", "South Korea", "Panama", "New Zealand", "Jordan"], "goalsPred": 214, "sheetScore": 16}, {"name": "Satchell", "picks": ["England", "Brazil", "Colombia", "Mexico", "Switzerland", "Paraguay", "Czechia", "Bosnia and Herzegovina", "South Korea", "South Africa", "Qatar", "Jordan"], "goalsPred": 283, "sheetScore": 16}, {"name": "Kehrli", "picks": ["England", "Brazil", "Norway", "Japan", "Turkiye", "Sweden", "Canada", "Ghana", "Australia", "Panama", "Iraq", "Curacao"], "goalsPred": 307, "sheetScore": 0}, {"name": "Doherty", "picks": ["England", "Germany", "Belgium", "United States", "Croatia", "Austria", "Canada", "Egypt", "South Korea", "South Africa", "Qatar", "Curacao"], "goalsPred": 162, "sheetScore": 10}, {"name": "Hedge", "picks": ["England", "Germany", "Belgium", "Uruguay", "Switzerland", "Austria", "Canada", "Algeria", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 287, "sheetScore": 10}, {"name": "Vavelidis", "picks": ["England", "Germany", "Colombia", "Japan", "Switzerland", "Senegal", "Canada", "Egypt", "Iran", "South Africa", "Uzbekistan", "Jordan"], "goalsPred": 302, "sheetScore": 0}, {"name": "Marcus J.", "picks": ["England", "Germany", "Colombia", "Mexico", "Ecuador", "Austria", "Czechia", "Algeria", "Iran", "Panama", "New Zealand", "Curacao"], "goalsPred": 292, "sheetScore": 6}, {"name": "Ye", "picks": ["England", "Germany", "Morocco", "Japan", "Switzerland", "Sweden", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Qatar", "Cape Verde"], "goalsPred": 220, "sheetScore": 10}, {"name": "Enright", "picks": ["England", "Germany", "Morocco", "United States", "Croatia", "Senegal", "Czechia", "Egypt", "Iran", "Saudi Arabia", "Iraq", "Cape Verde"], "goalsPred": 201, "sheetScore": 1}, {"name": "Day", "picks": ["England", "Germany", "Norway", "Mexico", "Switzerland", "Paraguay", "Canada", "Egypt", "South Korea", "Panama", "New Zealand", "Haiti"], "goalsPred": 312, "sheetScore": 15}, {"name": "Bell", "picks": ["England", "Germany", "Norway", "Mexico", "Turkiye", "Senegal", "Canada", "Algeria", "South Korea", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 257, "sheetScore": 15}, {"name": "DiMenna", "picks": ["England", "Germany", "Norway", "United States", "Croatia", "Sweden", "Czechia", "Algeria", "South Korea", "Panama", "Qatar", "Curacao"], "goalsPred": 137, "sheetScore": 11}, {"name": "Harvitt L.", "picks": ["England", "Netherlands", "Colombia", "United States", "Croatia", "Austria", "Czechia", "Bosnia and Herzegovina", "Australia", "South Africa", "Qatar", "Curacao"], "goalsPred": 166, "sheetScore": 1}, {"name": "Nicholson", "picks": ["England", "Portugal", "Belgium", "Mexico", "Turkiye", "Sweden", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Qatar", "Curacao"], "goalsPred": 367, "sheetScore": 15}, {"name": "Brenner", "picks": ["England", "Portugal", "Colombia", "Mexico", "Ecuador", "Austria", "Czechia", "Ghana", "South Korea", "Panama", "Uzbekistan", "Haiti"], "goalsPred": 365, "sheetScore": 16}, {"name": "Moses", "picks": ["England", "Portugal", "Colombia", "Uruguay", "Switzerland", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Saudi Arabia", "Uzbekistan", "Jordan"], "goalsPred": 287, "sheetScore": 10}, {"name": "Ahmad", "picks": ["England", "Portugal", "Morocco", "United States", "Croatia", "Senegal", "Ivory Coast", "Algeria", "Iran", "Panama", "Uzbekistan", "Jordan"], "goalsPred": 175, "sheetScore": 0}, {"name": "Loomis", "picks": ["England", "Portugal", "Morocco", "United States", "Switzerland", "Austria", "Canada", "Bosnia and Herzegovina", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 181, "sheetScore": 10}, {"name": "Shafroth M.", "picks": ["England", "Portugal", "Morocco", "United States", "Switzerland", "Senegal", "Canada", "Egypt", "South Korea", "South Africa", "Uzbekistan", "Cape Verde"], "goalsPred": 281, "sheetScore": 10}, {"name": "Keh", "picks": ["England", "Portugal", "Norway", "Japan", "Ecuador", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Haiti"], "goalsPred": 292, "sheetScore": 10}, {"name": "Dale", "picks": ["England", "Portugal", "Norway", "Mexico", "Turkiye", "Austria", "Ivory Coast", "Egypt", "South Korea", "Saudi Arabia", "Uzbekistan", "Cape Verde"], "goalsPred": 303, "sheetScore": 15}, {"name": "Harty", "picks": ["England", "Portugal", "Norway", "United States", "Ecuador", "Senegal", "Scotland", "Ghana", "Australia", "South Africa", "New Zealand", "Haiti"], "goalsPred": 295, "sheetScore": 0}, {"name": "Lim", "picks": ["France", "Brazil", "Belgium", "Japan", "Switzerland", "Senegal", "Canada", "Bosnia and Herzegovina", "South Korea", "South Africa", "Uzbekistan", "Curacao"], "goalsPred": 167, "sheetScore": 10}, {"name": "McDowell", "picks": ["France", "Brazil", "Belgium", "Japan", "Turkiye", "Austria", "Canada", "Ghana", "South Korea", "Panama", "New Zealand", "Curacao"], "goalsPred": 161, "sheetScore": 10}, {"name": "Platt", "picks": ["France", "Brazil", "Belgium", "Mexico", "Croatia", "Sweden", "Czechia", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 277, "sheetScore": 16}, {"name": "DiSpigna", "picks": ["France", "Brazil", "Belgium", "Mexico", "Ecuador", "Paraguay", "Canada", "Egypt", "Australia", "South Africa", "Qatar", "Cape Verde"], "goalsPred": 283, "sheetScore": 5}, {"name": "Shuman", "picks": ["France", "Brazil", "Belgium", "Mexico", "Switzerland", "Senegal", "Canada", "Algeria", "South Korea", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 270, "sheetScore": 15}, {"name": "Batchelor", "picks": ["France", "Brazil", "Belgium", "Mexico", "Switzerland", "Senegal", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 282, "sheetScore": 15}, {"name": "Guthrie J.", "picks": ["France", "Brazil", "Belgium", "Mexico", "Switzerland", "Senegal", "Scotland", "Ghana", "Australia", "Panama", "Iraq", "Haiti"], "goalsPred": 260, "sheetScore": 5}, {"name": "Downey-Zayas", "picks": ["France", "Brazil", "Belgium", "Mexico", "Turkiye", "Senegal", "Czechia", "Ghana", "South Korea", "Panama", "Uzbekistan", "Curacao"], "goalsPred": 170, "sheetScore": 16}, {"name": "Mullin", "picks": ["France", "Brazil", "Belgium", "United States", "Croatia", "Paraguay", "Ivory Coast", "Egypt", "Australia", "South Africa", "New Zealand", "Curacao"], "goalsPred": 167, "sheetScore": 0}, {"name": "Paul", "picks": ["France", "Brazil", "Belgium", "United States", "Croatia", "Senegal", "Canada", "Egypt", "Australia", "Congo DR", "New Zealand", "Haiti"], "goalsPred": 323, "sheetScore": 0}, {"name": "Colodette", "picks": ["France", "Brazil", "Belgium", "United States", "Croatia", "Senegal", "Canada", "Egypt", "Iran", "Saudi Arabia", "Uzbekistan", "Cape Verde"], "goalsPred": 200, "sheetScore": 0}, {"name": "Cottrell", "picks": ["France", "Brazil", "Belgium", "United States", "Croatia", "Sweden", "Ivory Coast", "Egypt", "South Korea", "Panama", "New Zealand", "Haiti"], "goalsPred": 168, "sheetScore": 10}, {"name": "Edmondson", "picks": ["France", "Brazil", "Belgium", "Uruguay", "Croatia", "Senegal", "Canada", "Bosnia and Herzegovina", "South Korea", "Congo DR", "Qatar", "Jordan"], "goalsPred": 280, "sheetScore": 10}, {"name": "Muakkassa", "picks": ["France", "Brazil", "Belgium", "Uruguay", "Croatia", "Senegal", "Canada", "Bosnia and Herzegovina", "South Korea", "Saudi Arabia", "Qatar", "Jordan"], "goalsPred": 282, "sheetScore": 10}, {"name": "Stauber S.", "picks": ["France", "Brazil", "Belgium", "Uruguay", "Turkiye", "Senegal", "Canada", "Egypt", "South Korea", "Saudi Arabia", "New Zealand", "Jordan"], "goalsPred": 267, "sheetScore": 10}, {"name": "Nudelman", "picks": ["France", "Brazil", "Colombia", "Japan", "Ecuador", "Senegal", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Jordan"], "goalsPred": 290, "sheetScore": 10}, {"name": "Mauro", "picks": ["France", "Brazil", "Colombia", "Mexico", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 287, "sheetScore": 15}, {"name": "Corasaniti", "picks": ["France", "Brazil", "Colombia", "Mexico", "Turkiye", "Paraguay", "Ivory Coast", "Ghana", "South Korea", "South Africa", "New Zealand", "Jordan"], "goalsPred": 290, "sheetScore": 15}, {"name": "Vicchio M.", "picks": ["France", "Brazil", "Colombia", "United States", "Turkiye", "Senegal", "Czechia", "Bosnia and Herzegovina", "South Korea", "Saudi Arabia", "Qatar", "Cape Verde"], "goalsPred": 275, "sheetScore": 11}, {"name": "Rivera", "picks": ["France", "Brazil", "Colombia", "United States", "Turkiye", "Senegal", "Ivory Coast", "Ghana", "South Korea", "Congo DR", "Qatar", "Curacao"], "goalsPred": 223, "sheetScore": 10}, {"name": "Tripodi", "picks": ["France", "Brazil", "Morocco", "Japan", "Turkiye", "Sweden", "Canada", "Algeria", "South Korea", "Saudi Arabia", "Qatar", "Jordan"], "goalsPred": 170, "sheetScore": 10}, {"name": "Watkins", "picks": ["France", "Brazil", "Morocco", "Uruguay", "Croatia", "Senegal", "Canada", "Egypt", "South Korea", "South Africa", "Qatar", "Cape Verde"], "goalsPred": 272, "sheetScore": 10}, {"name": "Greenblum", "picks": ["France", "Brazil", "Norway", "Japan", "Turkiye", "Senegal", "Canada", "Algeria", "Australia", "Panama", "New Zealand", "Cape Verde"], "goalsPred": 293, "sheetScore": 0}, {"name": "Bonilla", "picks": ["France", "Brazil", "Norway", "United States", "Croatia", "Senegal", "Canada", "Ghana", "South Korea", "Congo DR", "Iraq", "Curacao"], "goalsPred": 252, "sheetScore": 10}, {"name": "Heneghan", "picks": ["France", "Brazil", "Norway", "Uruguay", "Switzerland", "Sweden", "Canada", "Ghana", "Australia", "South Africa", "New Zealand", "Cape Verde"], "goalsPred": 169, "sheetScore": 0}, {"name": "Zevallos P.", "picks": ["France", "Germany", "Belgium", "Japan", "Switzerland", "Paraguay", "Canada", "Bosnia and Herzegovina", "South Korea", "Panama", "Iraq", "Curacao"], "goalsPred": 270, "sheetScore": 10}, {"name": "Neff", "picks": ["France", "Germany", "Belgium", "Mexico", "Croatia", "Austria", "Ivory Coast", "Ghana", "Australia", "Panama", "Qatar", "Jordan"], "goalsPred": 302, "sheetScore": 5}, {"name": "Andersen", "picks": ["France", "Germany", "Belgium", "United States", "Ecuador", "Austria", "Canada", "Ghana", "South Korea", "Saudi Arabia", "Iraq", "Jordan"], "goalsPred": 299, "sheetScore": 10}, {"name": "Hingorani", "picks": ["France", "Germany", "Belgium", "Uruguay", "Ecuador", "Austria", "Ivory Coast", "Ghana", "South Korea", "South Africa", "Uzbekistan", "Jordan"], "goalsPred": 280, "sheetScore": 10}, {"name": "Tunkel", "picks": ["France", "Germany", "Belgium", "Uruguay", "Switzerland", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 322, "sheetScore": 10}, {"name": "Voytek", "picks": ["France", "Germany", "Colombia", "Japan", "Turkiye", "Senegal", "Czechia", "Bosnia and Herzegovina", "Australia", "Panama", "New Zealand", "Cape Verde"], "goalsPred": 382, "sheetScore": 1}, {"name": "Kirchner D.", "picks": ["France", "Germany", "Colombia", "Mexico", "Croatia", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "New Zealand", "Jordan"], "goalsPred": 277, "sheetScore": 15}, {"name": "Skillin", "picks": ["France", "Germany", "Colombia", "Mexico", "Switzerland", "Austria", "Canada", "Bosnia and Herzegovina", "Iran", "South Africa", "Uzbekistan", "Cape Verde"], "goalsPred": 269, "sheetScore": 5}, {"name": "Zygmunt K.", "picks": ["France", "Germany", "Colombia", "Mexico", "Turkiye", "Austria", "Canada", "Algeria", "South Korea", "Panama", "Uzbekistan", "Cape Verde"], "goalsPred": 320, "sheetScore": 15}, {"name": "Waldron", "picks": ["France", "Germany", "Colombia", "United States", "Ecuador", "Austria", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Curacao"], "goalsPred": 150, "sheetScore": 10}, {"name": "Hoberecht", "picks": ["France", "Germany", "Morocco", "United States", "Turkiye", "Senegal", "Scotland", "Egypt", "Tunisia", "Panama", "Qatar", "Haiti"], "goalsPred": 169, "sheetScore": 0}, {"name": "Davey", "picks": ["France", "Germany", "Morocco", "Uruguay", "Ecuador", "Austria", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Uzbekistan", "Jordan"], "goalsPred": 279, "sheetScore": 10}, {"name": "Vicchio T.", "picks": ["France", "Germany", "Norway", "Japan", "Croatia", "Senegal", "Scotland", "Ghana", "South Korea", "Saudi Arabia", "New Zealand", "Haiti"], "goalsPred": 262, "sheetScore": 10}, {"name": "Koller", "picks": ["France", "Germany", "Norway", "Mexico", "Turkiye", "Sweden", "Czechia", "Ghana", "Australia", "South Africa", "New Zealand", "Curacao"], "goalsPred": 145, "sheetScore": 6}, {"name": "Pusch", "picks": ["France", "Germany", "Norway", "United States", "Switzerland", "Paraguay", "Ivory Coast", "Algeria", "South Korea", "Panama", "Uzbekistan", "Cape Verde"], "goalsPred": 286, "sheetScore": 10}, {"name": "Boorstein", "picks": ["France", "Netherlands", "Belgium", "Mexico", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "Congo DR", "Iraq", "Haiti"], "goalsPred": 333, "sheetScore": 15}, {"name": "Thompson", "picks": ["France", "Netherlands", "Belgium", "Mexico", "Switzerland", "Paraguay", "Scotland", "Egypt", "South Korea", "Saudi Arabia", "Uzbekistan", "Cape Verde"], "goalsPred": 199, "sheetScore": 15}, {"name": "Loew M.", "picks": ["France", "Netherlands", "Belgium", "United States", "Croatia", "Senegal", "Canada", "Ghana", "South Korea", "South Africa", "New Zealand", "Curacao"], "goalsPred": 171, "sheetScore": 10}, {"name": "Stewart", "picks": ["France", "Netherlands", "Belgium", "United States", "Croatia", "Sweden", "Ivory Coast", "Ghana", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 192, "sheetScore": 10}, {"name": "Loveless", "picks": ["France", "Netherlands", "Belgium", "United States", "Ecuador", "Sweden", "Czechia", "Algeria", "Tunisia", "Saudi Arabia", "Uzbekistan", "Curacao"], "goalsPred": 175, "sheetScore": 1}, {"name": "Jimenez", "picks": ["France", "Netherlands", "Belgium", "United States", "Switzerland", "Senegal", "Ivory Coast", "Ghana", "South Korea", "South Africa", "Qatar", "Haiti"], "goalsPred": 325, "sheetScore": 10}, {"name": "Johnson", "picks": ["France", "Netherlands", "Belgium", "United States", "Turkiye", "Paraguay", "Canada", "Bosnia and Herzegovina", "Iran", "Panama", "Iraq", "Jordan"], "goalsPred": 186, "sheetScore": 0}, {"name": "Alic Zec", "picks": ["France", "Netherlands", "Belgium", "Uruguay", "Switzerland", "Senegal", "Ivory Coast", "Bosnia and Herzegovina", "Tunisia", "Panama", "Iraq", "Haiti"], "goalsPred": 284, "sheetScore": 0}, {"name": "Brown", "picks": ["France", "Netherlands", "Colombia", "Japan", "Ecuador", "Austria", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Jordan"], "goalsPred": 235, "sheetScore": 10}, {"name": "Borden", "picks": ["France", "Netherlands", "Colombia", "Mexico", "Switzerland", "Senegal", "Canada", "Algeria", "South Korea", "Panama", "Uzbekistan", "Jordan"], "goalsPred": 302, "sheetScore": 15}, {"name": "Wagner S.", "picks": ["France", "Netherlands", "Colombia", "United States", "Croatia", "Senegal", "Canada", "Bosnia and Herzegovina", "Australia", "South Africa", "New Zealand", "Cape Verde"], "goalsPred": 285, "sheetScore": 0}, {"name": "Grant L.", "picks": ["France", "Netherlands", "Morocco", "Japan", "Croatia", "Senegal", "Canada", "Algeria", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 263, "sheetScore": 10}, {"name": "Vandenberg", "picks": ["France", "Netherlands", "Morocco", "Uruguay", "Turkiye", "Austria", "Ivory Coast", "Egypt", "South Korea", "South Africa", "Uzbekistan", "Jordan"], "goalsPred": 296, "sheetScore": 10}, {"name": "Smith", "picks": ["France", "Netherlands", "Norway", "Japan", "Turkiye", "Austria", "Canada", "Ghana", "Iran", "Saudi Arabia", "Uzbekistan", "Cape Verde"], "goalsPred": 354, "sheetScore": 0}, {"name": "Leopold", "picks": ["France", "Netherlands", "Norway", "United States", "Turkiye", "Senegal", "Canada", "Ghana", "South Korea", "Congo DR", "Qatar", "Haiti"], "goalsPred": 226, "sheetScore": 10}, {"name": "Felsted", "picks": ["France", "Netherlands", "Norway", "United States", "Turkiye", "Sweden", "Ivory Coast", "Ghana", "South Korea", "Panama", "New Zealand", "Curacao"], "goalsPred": 369, "sheetScore": 10}, {"name": "Mohr", "picks": ["France", "Portugal", "Belgium", "Japan", "Croatia", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Curacao"], "goalsPred": 247, "sheetScore": 10}, {"name": "Marinis", "picks": ["France", "Portugal", "Belgium", "Mexico", "Switzerland", "Austria", "Scotland", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 381, "sheetScore": 15}, {"name": "Zygmunt M.", "picks": ["France", "Portugal", "Belgium", "United States", "Croatia", "Austria", "Canada", "Bosnia and Herzegovina", "Iran", "South Africa", "New Zealand", "Jordan"], "goalsPred": 431, "sheetScore": 0}, {"name": "Berger R.", "picks": ["France", "Portugal", "Belgium", "United States", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Jordan"], "goalsPred": 290, "sheetScore": 10}, {"name": "Rooks", "picks": ["France", "Portugal", "Belgium", "United States", "Switzerland", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Congo DR", "Qatar", "Jordan"], "goalsPred": 268, "sheetScore": 10}, {"name": "Kalan", "picks": ["France", "Portugal", "Belgium", "United States", "Turkiye", "Senegal", "Ivory Coast", "Bosnia and Herzegovina", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 295, "sheetScore": 10}, {"name": "Moskowitz", "picks": ["France", "Portugal", "Belgium", "Uruguay", "Croatia", "Sweden", "Czechia", "Bosnia and Herzegovina", "South Korea", "Saudi Arabia", "Uzbekistan", "Cape Verde"], "goalsPred": 285, "sheetScore": 11}, {"name": "Draper", "picks": ["France", "Portugal", "Belgium", "Uruguay", "Ecuador", "Senegal", "Ivory Coast", "Bosnia and Herzegovina", "South Korea", "Saudi Arabia", "New Zealand", "Curacao"], "goalsPred": 304, "sheetScore": 10}, {"name": "Knowles", "picks": ["France", "Portugal", "Colombia", "Mexico", "Ecuador", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Congo DR", "Iraq", "Cape Verde"], "goalsPred": 335, "sheetScore": 15}, {"name": "Leboff", "picks": ["France", "Portugal", "Colombia", "Mexico", "Switzerland", "Austria", "Czechia", "Bosnia and Herzegovina", "Iran", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 243, "sheetScore": 6}, {"name": "Shafroth Ty.", "picks": ["France", "Portugal", "Colombia", "United States", "Croatia", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Haiti"], "goalsPred": 227, "sheetScore": 10}, {"name": "Nastri", "picks": ["France", "Portugal", "Colombia", "United States", "Turkiye", "Austria", "Ivory Coast", "Algeria", "South Korea", "Congo DR", "Uzbekistan", "Haiti"], "goalsPred": 368, "sheetScore": 10}, {"name": "Bush", "picks": ["France", "Portugal", "Colombia", "United States", "Turkiye", "Paraguay", "Canada", "Bosnia and Herzegovina", "Australia", "South Africa", "New Zealand", "Jordan"], "goalsPred": 281, "sheetScore": 0}, {"name": "Kushlis", "picks": ["France", "Portugal", "Colombia", "Uruguay", "Ecuador", "Senegal", "Ivory Coast", "Ghana", "South Korea", "Saudi Arabia", "New Zealand", "Jordan"], "goalsPred": 299, "sheetScore": 10}, {"name": "Vicchio D.", "picks": ["France", "Portugal", "Morocco", "Japan", "Ecuador", "Senegal", "Scotland", "Ghana", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 243, "sheetScore": 10}, {"name": "Attal", "picks": ["France", "Portugal", "Morocco", "Japan", "Switzerland", "Paraguay", "Ivory Coast", "Egypt", "South Korea", "Saudi Arabia", "New Zealand", "Curacao"], "goalsPred": 347, "sheetScore": 10}, {"name": "Mintrasak Na.", "picks": ["France", "Portugal", "Morocco", "Japan", "Turkiye", "Paraguay", "Ivory Coast", "Bosnia and Herzegovina", "Iran", "Saudi Arabia", "Uzbekistan", "Jordan"], "goalsPred": 187, "sheetScore": 0}, {"name": "Apolinario", "picks": ["France", "Portugal", "Morocco", "Japan", "Turkiye", "Senegal", "Canada", "Egypt", "Iran", "Saudi Arabia", "Iraq", "Jordan"], "goalsPred": 277, "sheetScore": 0}, {"name": "Schaitkin", "picks": ["France", "Portugal", "Morocco", "Japan", "Turkiye", "Senegal", "Ivory Coast", "Ghana", "Iran", "Congo DR", "Uzbekistan", "Haiti"], "goalsPred": 285, "sheetScore": 0}, {"name": "Sommer", "picks": ["France", "Portugal", "Morocco", "Japan", "Turkiye", "Senegal", "Ivory Coast", "Ghana", "South Korea", "Saudi Arabia", "New Zealand", "Jordan"], "goalsPred": 296, "sheetScore": 10}, {"name": "Rabadan", "picks": ["France", "Portugal", "Morocco", "Mexico", "Switzerland", "Paraguay", "Ivory Coast", "Egypt", "South Korea", "South Africa", "Qatar", "Curacao"], "goalsPred": 394, "sheetScore": 15}, {"name": "Shadowitz", "picks": ["France", "Portugal", "Morocco", "Mexico", "Switzerland", "Senegal", "Canada", "Ghana", "South Korea", "Panama", "New Zealand", "Curacao"], "goalsPred": 650, "sheetScore": 15}, {"name": "Mitchell", "picks": ["France", "Portugal", "Morocco", "United States", "Turkiye", "Austria", "Czechia", "Egypt", "South Korea", "Saudi Arabia", "New Zealand", "Haiti"], "goalsPred": 172, "sheetScore": 11}, {"name": "Fernandez", "picks": ["France", "Portugal", "Morocco", "United States", "Turkiye", "Senegal", "Ivory Coast", "Egypt", "South Korea", "South Africa", "New Zealand", "Jordan"], "goalsPred": 254, "sheetScore": 10}, {"name": "Donoso A.", "picks": ["France", "Portugal", "Morocco", "Uruguay", "Ecuador", "Senegal", "Canada", "Egypt", "South Korea", "South Africa", "Uzbekistan", "Curacao"], "goalsPred": 280, "sheetScore": 10}, {"name": "Marcus R.", "picks": ["France", "Portugal", "Morocco", "Uruguay", "Switzerland", "Sweden", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Uzbekistan", "Cape Verde"], "goalsPred": 282, "sheetScore": 10}, {"name": "Greene R.", "picks": ["France", "Portugal", "Morocco", "Uruguay", "Turkiye", "Senegal", "Ivory Coast", "Egypt", "Iran", "Panama", "Uzbekistan", "Cape Verde"], "goalsPred": 333, "sheetScore": 0}, {"name": "Melnick J.", "picks": ["France", "Portugal", "Norway", "Japan", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 260, "sheetScore": 10}, {"name": "Falgares", "picks": ["France", "Portugal", "Norway", "Mexico", "Croatia", "Sweden", "Ivory Coast", "Algeria", "South Korea", "Congo DR", "Qatar", "Curacao"], "goalsPred": 299, "sheetScore": 15}, {"name": "Kugler", "picks": ["France", "Portugal", "Norway", "Mexico", "Ecuador", "Austria", "Scotland", "Ghana", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 275, "sheetScore": 15}, {"name": "Wong", "picks": ["France", "Portugal", "Norway", "Mexico", "Switzerland", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Panama", "New Zealand", "Cape Verde"], "goalsPred": 296, "sheetScore": 15}, {"name": "Rehm", "picks": ["France", "Portugal", "Norway", "Mexico", "Switzerland", "Sweden", "Canada", "Ghana", "Australia", "South Africa", "Qatar", "Jordan"], "goalsPred": 280, "sheetScore": 5}, {"name": "Flynn", "picks": ["France", "Portugal", "Norway", "United States", "Croatia", "Paraguay", "Czechia", "Egypt", "South Korea", "Saudi Arabia", "Uzbekistan", "Cape Verde"], "goalsPred": 228, "sheetScore": 11}, {"name": "Lau", "picks": ["France", "Portugal", "Norway", "United States", "Croatia", "Senegal", "Scotland", "Egypt", "Iran", "South Africa", "Qatar", "Haiti"], "goalsPred": 275, "sheetScore": 0}, {"name": "Ballantyne", "picks": ["France", "Portugal", "Norway", "Uruguay", "Ecuador", "Sweden", "Ivory Coast", "Egypt", "South Korea", "South Africa", "Iraq", "Haiti"], "goalsPred": 280, "sheetScore": 10}, {"name": "Marabeti", "picks": ["France", "Portugal", "Norway", "Uruguay", "Switzerland", "Austria", "Canada", "Ghana", "South Korea", "South Africa", "New Zealand", "Curacao"], "goalsPred": 169, "sheetScore": 10}, {"name": "Wlach", "picks": ["France", "Portugal", "Norway", "Uruguay", "Turkiye", "Senegal", "Czechia", "Bosnia and Herzegovina", "South Korea", "Congo DR", "New Zealand", "Jordan"], "goalsPred": 266, "sheetScore": 11}, {"name": "Hausler", "picks": ["Spain", "Brazil", "Belgium", "Japan", "Croatia", "Austria", "Canada", "Algeria", "South Korea", "South Africa", "Iraq", "Haiti"], "goalsPred": 139, "sheetScore": 10}, {"name": "Steingold", "picks": ["Spain", "Brazil", "Belgium", "Japan", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "Panama", "New Zealand", "Jordan"], "goalsPred": 333, "sheetScore": 10}, {"name": "Prudden", "picks": ["Spain", "Brazil", "Belgium", "Japan", "Turkiye", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Saudi Arabia", "Iraq", "Haiti"], "goalsPred": 246, "sheetScore": 10}, {"name": "Quatroni", "picks": ["Spain", "Brazil", "Belgium", "Mexico", "Croatia", "Sweden", "Canada", "Ghana", "Australia", "Panama", "New Zealand", "Cape Verde"], "goalsPred": 153, "sheetScore": 5}, {"name": "Lynch J.", "picks": ["Spain", "Brazil", "Belgium", "Mexico", "Ecuador", "Senegal", "Czechia", "Ghana", "South Korea", "South Africa", "Uzbekistan", "Cape Verde"], "goalsPred": 236, "sheetScore": 16}, {"name": "Spunberg A.", "picks": ["Spain", "Brazil", "Belgium", "Mexico", "Switzerland", "Paraguay", "Czechia", "Ghana", "Iran", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 376, "sheetScore": 6}, {"name": "Debiche", "picks": ["Spain", "Brazil", "Belgium", "Mexico", "Switzerland", "Senegal", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 350, "sheetScore": 15}, {"name": "Braverman", "picks": ["Spain", "Brazil", "Belgium", "United States", "Croatia", "Senegal", "Ivory Coast", "Algeria", "Australia", "South Africa", "Qatar", "Haiti"], "goalsPred": 312, "sheetScore": 0}, {"name": "Shafroth N.", "picks": ["Spain", "Brazil", "Belgium", "United States", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Uzbekistan", "Jordan"], "goalsPred": 290, "sheetScore": 10}, {"name": "Farrice", "picks": ["Spain", "Brazil", "Belgium", "United States", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "South Africa", "New Zealand", "Cape Verde"], "goalsPred": 260, "sheetScore": 10}, {"name": "Gordon", "picks": ["Spain", "Brazil", "Belgium", "United States", "Switzerland", "Senegal", "Canada", "Algeria", "South Korea", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 373, "sheetScore": 10}, {"name": "Patel", "picks": ["Spain", "Brazil", "Belgium", "United States", "Switzerland", "Sweden", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Iraq", "Curacao"], "goalsPred": 167, "sheetScore": 10}, {"name": "Battifarano", "picks": ["Spain", "Brazil", "Belgium", "United States", "Turkiye", "Senegal", "Ivory Coast", "Algeria", "South Korea", "Congo DR", "Qatar", "Cape Verde"], "goalsPred": 243, "sheetScore": 10}, {"name": "Garry", "picks": ["Spain", "Brazil", "Belgium", "Uruguay", "Switzerland", "Austria", "Ivory Coast", "Bosnia and Herzegovina", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 157, "sheetScore": 10}, {"name": "Marcus B.", "picks": ["Spain", "Brazil", "Belgium", "Uruguay", "Switzerland", "Sweden", "Czechia", "Egypt", "South Korea", "Congo DR", "Qatar", "Jordan"], "goalsPred": 341, "sheetScore": 11}, {"name": "Berger A.", "picks": ["Spain", "Brazil", "Colombia", "Japan", "Ecuador", "Austria", "Czechia", "Algeria", "South Korea", "Panama", "Qatar", "Curacao"], "goalsPred": 222, "sheetScore": 11}, {"name": "Donoso L.", "picks": ["Spain", "Brazil", "Colombia", "Japan", "Ecuador", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Jordan"], "goalsPred": 280, "sheetScore": 10}, {"name": "Hurlbert", "picks": ["Spain", "Brazil", "Colombia", "Japan", "Ecuador", "Senegal", "Czechia", "Algeria", "South Korea", "Saudi Arabia", "Uzbekistan", "Curacao"], "goalsPred": 269, "sheetScore": 11}, {"name": "Wagner J.", "picks": ["Spain", "Brazil", "Colombia", "Japan", "Switzerland", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Jordan"], "goalsPred": 325, "sheetScore": 10}, {"name": "Card", "picks": ["Spain", "Brazil", "Colombia", "Mexico", "Turkiye", "Senegal", "Ivory Coast", "Bosnia and Herzegovina", "South Korea", "Congo DR", "New Zealand", "Curacao"], "goalsPred": 290, "sheetScore": 15}, {"name": "Obermuller D.", "picks": ["Spain", "Brazil", "Colombia", "United States", "Switzerland", "Austria", "Czechia", "Egypt", "South Korea", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 349, "sheetScore": 11}, {"name": "Lynch M.", "picks": ["Spain", "Brazil", "Colombia", "United States", "Switzerland", "Senegal", "Czechia", "Algeria", "Iran", "Panama", "New Zealand", "Cape Verde"], "goalsPred": 299, "sheetScore": 1}, {"name": "Kay", "picks": ["Spain", "Brazil", "Colombia", "United States", "Switzerland", "Senegal", "Ivory Coast", "Algeria", "South Korea", "Saudi Arabia", "Uzbekistan", "Cape Verde"], "goalsPred": 177, "sheetScore": 10}, {"name": "Avino", "picks": ["Spain", "Brazil", "Colombia", "United States", "Switzerland", "Sweden", "Czechia", "Egypt", "South Korea", "Panama", "Iraq", "Curacao"], "goalsPred": 285, "sheetScore": 11}, {"name": "Stauber B.", "picks": ["Spain", "Brazil", "Colombia", "Uruguay", "Switzerland", "Senegal", "Ivory Coast", "Egypt", "South Korea", "South Africa", "Qatar", "Haiti"], "goalsPred": 272, "sheetScore": 10}, {"name": "Medina", "picks": ["Spain", "Brazil", "Morocco", "Mexico", "Croatia", "Sweden", "Canada", "Egypt", "Australia", "Panama", "New Zealand", "Curacao"], "goalsPred": 269, "sheetScore": 5}, {"name": "Levy", "picks": ["Spain", "Brazil", "Morocco", "United States", "Turkiye", "Austria", "Canada", "Egypt", "Tunisia", "Congo DR", "Iraq", "Cape Verde"], "goalsPred": 169, "sheetScore": 0}, {"name": "Kumar", "picks": ["Spain", "Brazil", "Morocco", "Uruguay", "Turkiye", "Sweden", "Canada", "Bosnia and Herzegovina", "South Korea", "South Africa", "Uzbekistan", "Cape Verde"], "goalsPred": 299, "sheetScore": 10}, {"name": "Rosales", "picks": ["Spain", "Brazil", "Norway", "Japan", "Switzerland", "Senegal", "Scotland", "Bosnia and Herzegovina", "South Korea", "South Africa", "Qatar", "Curacao"], "goalsPred": 172, "sheetScore": 10}, {"name": "Saint-Pierre", "picks": ["Spain", "Brazil", "Norway", "Mexico", "Croatia", "Sweden", "Scotland", "Ghana", "Iran", "Panama", "New Zealand", "Cape Verde"], "goalsPred": 283, "sheetScore": 5}, {"name": "Gomez", "picks": ["Spain", "Brazil", "Norway", "Mexico", "Ecuador", "Austria", "Canada", "Egypt", "South Korea", "South Africa", "Qatar", "Haiti"], "goalsPred": 282, "sheetScore": 15}, {"name": "Schaffer", "picks": ["Spain", "Brazil", "Norway", "Mexico", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 306, "sheetScore": 15}, {"name": "Dykstra", "picks": ["Spain", "Brazil", "Norway", "United States", "Croatia", "Austria", "Canada", "Egypt", "South Korea", "Congo DR", "Uzbekistan", "Curacao"], "goalsPred": 270, "sheetScore": 10}, {"name": "Berger H.", "picks": ["Spain", "Brazil", "Norway", "United States", "Croatia", "Senegal", "Canada", "Egypt", "Tunisia", "Saudi Arabia", "Iraq", "Jordan"], "goalsPred": 275, "sheetScore": 0}, {"name": "Herbst", "picks": ["Spain", "Brazil", "Norway", "United States", "Croatia", "Senegal", "Ivory Coast", "Egypt", "South Korea", "South Africa", "Qatar", "Cape Verde"], "goalsPred": 270, "sheetScore": 10}, {"name": "Scher", "picks": ["Spain", "Brazil", "Norway", "Uruguay", "Ecuador", "Senegal", "Canada", "Egypt", "South Korea", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 278, "sheetScore": 10}, {"name": "Fisher", "picks": ["Spain", "Brazil", "Norway", "Uruguay", "Ecuador", "Senegal", "Scotland", "Egypt", "South Korea", "Panama", "New Zealand", "Jordan"], "goalsPred": 318, "sheetScore": 10}, {"name": "Patro", "picks": ["Spain", "Brazil", "Norway", "Uruguay", "Switzerland", "Senegal", "Canada", "Algeria", "South Korea", "Saudi Arabia", "Qatar", "Haiti"], "goalsPred": 282, "sheetScore": 10}, {"name": "Gottlieb", "picks": ["Spain", "Germany", "Belgium", "Japan", "Croatia", "Senegal", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Jordan"], "goalsPred": 364, "sheetScore": 10}, {"name": "Parker", "picks": ["Spain", "Germany", "Belgium", "Mexico", "Croatia", "Senegal", "Czechia", "Egypt", "Australia", "Panama", "Qatar", "Curacao"], "goalsPred": 183, "sheetScore": 6}, {"name": "Anders", "picks": ["Spain", "Germany", "Belgium", "Mexico", "Turkiye", "Austria", "Canada", "Algeria", "South Korea", "Congo DR", "Uzbekistan", "Jordan"], "goalsPred": 184, "sheetScore": 15}, {"name": "McGowan", "picks": ["Spain", "Germany", "Belgium", "United States", "Croatia", "Austria", "Czechia", "Egypt", "Australia", "Saudi Arabia", "Uzbekistan", "Haiti"], "goalsPred": 295, "sheetScore": 1}, {"name": "Epstein", "picks": ["Spain", "Germany", "Belgium", "United States", "Switzerland", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Cape Verde"], "goalsPred": 278, "sheetScore": 10}, {"name": "Murphy", "picks": ["Spain", "Germany", "Belgium", "United States", "Switzerland", "Senegal", "Ivory Coast", "Ghana", "Australia", "South Africa", "Iraq", "Jordan"], "goalsPred": 230, "sheetScore": 0}, {"name": "Laube E.", "picks": ["Spain", "Germany", "Colombia", "Japan", "Croatia", "Sweden", "Ivory Coast", "Bosnia and Herzegovina", "South Korea", "South Africa", "Iraq", "Cape Verde"], "goalsPred": 318, "sheetScore": 10}, {"name": "Kirchner C.", "picks": ["Spain", "Germany", "Colombia", "Japan", "Ecuador", "Senegal", "Canada", "Algeria", "Australia", "Panama", "Uzbekistan", "Jordan"], "goalsPred": 280, "sheetScore": 0}, {"name": "Grant G.", "picks": ["Spain", "Germany", "Colombia", "Mexico", "Turkiye", "Senegal", "Canada", "Algeria", "Iran", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 259, "sheetScore": 5}, {"name": "Desrochers", "picks": ["Spain", "Germany", "Morocco", "Japan", "Switzerland", "Austria", "Ivory Coast", "Ghana", "Australia", "Saudi Arabia", "New Zealand", "Haiti"], "goalsPred": 293, "sheetScore": 0}, {"name": "Mintrasak Ni.", "picks": ["Spain", "Germany", "Morocco", "Japan", "Turkiye", "Austria", "Czechia", "Egypt", "South Korea", "South Africa", "Uzbekistan", "Jordan"], "goalsPred": 198, "sheetScore": 11}, {"name": "Graser", "picks": ["Spain", "Germany", "Norway", "Mexico", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "Congo DR", "Uzbekistan", "Jordan"], "goalsPred": 301, "sheetScore": 15}, {"name": "Ennis", "picks": ["Spain", "Germany", "Norway", "Mexico", "Turkiye", "Senegal", "Canada", "Egypt", "Iran", "Saudi Arabia", "New Zealand", "Curacao"], "goalsPred": 301, "sheetScore": 5}, {"name": "Tan", "picks": ["Spain", "Germany", "Norway", "United States", "Ecuador", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "Qatar", "Jordan"], "goalsPred": 280, "sheetScore": 10}, {"name": "Moghe", "picks": ["Spain", "Germany", "Norway", "Uruguay", "Turkiye", "Paraguay", "Canada", "Egypt", "South Korea", "Panama", "Uzbekistan", "Cape Verde"], "goalsPred": 297, "sheetScore": 10}, {"name": "Alster", "picks": ["Spain", "Netherlands", "Belgium", "Mexico", "Ecuador", "Senegal", "Canada", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 169, "sheetScore": 15}, {"name": "Shafroth W.", "picks": ["Spain", "Netherlands", "Belgium", "Mexico", "Ecuador", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Saudi Arabia", "Iraq", "Cape Verde"], "goalsPred": 289, "sheetScore": 15}, {"name": "Harvitt B.", "picks": ["Spain", "Netherlands", "Belgium", "Uruguay", "Switzerland", "Senegal", "Czechia", "Bosnia and Herzegovina", "Iran", "Congo DR", "Uzbekistan", "Curacao"], "goalsPred": 171, "sheetScore": 1}, {"name": "Ricke", "picks": ["Spain", "Netherlands", "Colombia", "Japan", "Switzerland", "Austria", "Canada", "Algeria", "South Korea", "Panama", "Qatar", "Jordan"], "goalsPred": 274, "sheetScore": 10}, {"name": "Hornblum", "picks": ["Spain", "Netherlands", "Colombia", "Mexico", "Ecuador", "Austria", "Scotland", "Egypt", "South Korea", "Panama", "New Zealand", "Cape Verde"], "goalsPred": 203, "sheetScore": 15}, {"name": "Wallace", "picks": ["Spain", "Netherlands", "Norway", "Mexico", "Switzerland", "Sweden", "Canada", "Bosnia and Herzegovina", "South Korea", "Panama", "New Zealand", "Jordan"], "goalsPred": 279, "sheetScore": 15}, {"name": "Piatt", "picks": ["Spain", "Netherlands", "Norway", "United States", "Croatia", "Senegal", "Ivory Coast", "Ghana", "Australia", "South Africa", "Uzbekistan", "Cape Verde"], "goalsPred": 360, "sheetScore": 0}, {"name": "Nehamas", "picks": ["Spain", "Netherlands", "Norway", "United States", "Ecuador", "Senegal", "Canada", "Algeria", "Iran", "South Africa", "New Zealand", "Haiti"], "goalsPred": 300, "sheetScore": 0}, {"name": "Berger L.", "picks": ["Spain", "Netherlands", "Norway", "United States", "Switzerland", "Senegal", "Czechia", "Bosnia and Herzegovina", "South Korea", "Saudi Arabia", "Uzbekistan", "Curacao"], "goalsPred": 260, "sheetScore": 11}, {"name": "Zevallos R.", "picks": ["Spain", "Portugal", "Belgium", "Japan", "Ecuador", "Austria", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Iraq", "Jordan"], "goalsPred": 277, "sheetScore": 10}, {"name": "Rossmann", "picks": ["Spain", "Portugal", "Belgium", "Japan", "Ecuador", "Senegal", "Czechia", "Egypt", "South Korea", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 313, "sheetScore": 11}, {"name": "Arias Uran", "picks": ["Spain", "Portugal", "Belgium", "Japan", "Switzerland", "Austria", "Ivory Coast", "Egypt", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 284, "sheetScore": 10}, {"name": "Laube S.", "picks": ["Spain", "Portugal", "Belgium", "Mexico", "Switzerland", "Sweden", "Canada", "Algeria", "South Korea", "Saudi Arabia", "New Zealand", "Curacao"], "goalsPred": 204, "sheetScore": 15}, {"name": "Shepard", "picks": ["Spain", "Portugal", "Belgium", "United States", "Switzerland", "Austria", "Canada", "Egypt", "South Korea", "South Africa", "Uzbekistan", "Cape Verde"], "goalsPred": 287, "sheetScore": 10}, {"name": "Melnick A.", "picks": ["Spain", "Portugal", "Belgium", "United States", "Switzerland", "Austria", "Ivory Coast", "Egypt", "South Korea", "Congo DR", "Uzbekistan", "Cape Verde"], "goalsPred": 288, "sheetScore": 10}, {"name": "Guthrie M.", "picks": ["Spain", "Portugal", "Belgium", "Uruguay", "Ecuador", "Senegal", "Scotland", "Ghana", "South Korea", "South Africa", "New Zealand", "Cape Verde"], "goalsPred": 287, "sheetScore": 10}, {"name": "O'Connor", "picks": ["Spain", "Portugal", "Belgium", "Uruguay", "Switzerland", "Austria", "Canada", "Egypt", "Iran", "South Africa", "New Zealand", "Haiti"], "goalsPred": 212, "sheetScore": 0}, {"name": "Corti", "picks": ["Spain", "Portugal", "Belgium", "Uruguay", "Switzerland", "Sweden", "Ivory Coast", "Ghana", "Iran", "Congo DR", "Iraq", "Cape Verde"], "goalsPred": 280, "sheetScore": 0}, {"name": "Frankel", "picks": ["Spain", "Portugal", "Colombia", "Mexico", "Switzerland", "Austria", "Czechia", "Algeria", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 291, "sheetScore": 16}, {"name": "Gonot", "picks": ["Spain", "Portugal", "Colombia", "Mexico", "Switzerland", "Senegal", "Canada", "Algeria", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 165, "sheetScore": 15}, {"name": "Clarke", "picks": ["Spain", "Portugal", "Colombia", "United States", "Croatia", "Senegal", "Canada", "Ghana", "South Korea", "Saudi Arabia", "Uzbekistan", "Jordan"], "goalsPred": 370, "sheetScore": 10}, {"name": "Widawsky", "picks": ["Spain", "Portugal", "Colombia", "United States", "Turkiye", "Paraguay", "Ivory Coast", "Ghana", "Tunisia", "Panama", "New Zealand", "Haiti"], "goalsPred": 382, "sheetScore": 0}, {"name": "Polinsky", "picks": ["Spain", "Portugal", "Colombia", "Uruguay", "Croatia", "Senegal", "Canada", "Egypt", "South Korea", "Congo DR", "Uzbekistan", "Jordan"], "goalsPred": 298, "sheetScore": 10}, {"name": "Keating", "picks": ["Spain", "Portugal", "Colombia", "Uruguay", "Ecuador", "Sweden", "Czechia", "Algeria", "South Korea", "Panama", "New Zealand", "Curacao"], "goalsPred": 312, "sheetScore": 11}, {"name": "Sanchirico", "picks": ["Spain", "Portugal", "Morocco", "Japan", "Turkiye", "Austria", "Ivory Coast", "Egypt", "South Korea", "Congo DR", "New Zealand", "Haiti"], "goalsPred": 248, "sheetScore": 10}, {"name": "Raymond", "picks": ["Spain", "Portugal", "Morocco", "Mexico", "Switzerland", "Paraguay", "Ivory Coast", "Egypt", "Iran", "Panama", "Uzbekistan", "Jordan"], "goalsPred": 220, "sheetScore": 5}, {"name": "Duryee-Browner", "picks": ["Spain", "Portugal", "Morocco", "Mexico", "Turkiye", "Austria", "Canada", "Egypt", "South Korea", "Panama", "New Zealand", "Haiti"], "goalsPred": 165, "sheetScore": 15}, {"name": "Lewton", "picks": ["Spain", "Portugal", "Morocco", "United States", "Croatia", "Senegal", "Ivory Coast", "Algeria", "Australia", "Panama", "Uzbekistan", "Haiti"], "goalsPred": 258, "sheetScore": 0}, {"name": "Ewing", "picks": ["Spain", "Portugal", "Morocco", "United States", "Switzerland", "Senegal", "Ivory Coast", "Bosnia and Herzegovina", "Tunisia", "Congo DR", "Qatar", "Curacao"], "goalsPred": 210, "sheetScore": 0}, {"name": "Marshall", "picks": ["Spain", "Portugal", "Morocco", "Uruguay", "Ecuador", "Sweden", "Czechia", "Algeria", "South Korea", "Congo DR", "New Zealand", "Haiti"], "goalsPred": 337, "sheetScore": 11}, {"name": "Cronshey", "picks": ["Spain", "Portugal", "Morocco", "Uruguay", "Switzerland", "Austria", "Ivory Coast", "Egypt", "South Korea", "South Africa", "Uzbekistan", "Cape Verde"], "goalsPred": 281, "sheetScore": 10}, {"name": "Fine", "picks": ["Spain", "Portugal", "Morocco", "Uruguay", "Switzerland", "Senegal", "Canada", "Egypt", "South Korea", "Panama", "New Zealand", "Curacao"], "goalsPred": 270, "sheetScore": 10}, {"name": "Villamor", "picks": ["Spain", "Portugal", "Norway", "Japan", "Switzerland", "Senegal", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Uzbekistan", "Curacao"], "goalsPred": 325, "sheetScore": 10}, {"name": "Freinhar", "picks": ["Spain", "Portugal", "Norway", "Japan", "Switzerland", "Senegal", "Scotland", "Ghana", "South Korea", "Panama", "Qatar", "Cape Verde"], "goalsPred": 325, "sheetScore": 10}, {"name": "Keague", "picks": ["Spain", "Portugal", "Norway", "Japan", "Turkiye", "Senegal", "Ivory Coast", "Egypt", "South Korea", "Saudi Arabia", "New Zealand", "Jordan"], "goalsPred": 206, "sheetScore": 10}, {"name": "Hawkins", "picks": ["Spain", "Portugal", "Norway", "Mexico", "Switzerland", "Sweden", "Czechia", "Egypt", "Iran", "Saudi Arabia", "Uzbekistan", "Curacao"], "goalsPred": 301, "sheetScore": 6}, {"name": "Victor", "picks": ["Spain", "Portugal", "Norway", "United States", "Croatia", "Sweden", "Ivory Coast", "Ghana", "South Korea", "South Africa", "Uzbekistan", "Jordan"], "goalsPred": 204, "sheetScore": 10}, {"name": "Halperin", "picks": ["Spain", "Portugal", "Norway", "United States", "Turkiye", "Sweden", "Canada", "Bosnia and Herzegovina", "South Korea", "Congo DR", "New Zealand", "Cape Verde"], "goalsPred": 283, "sheetScore": 10}, {"name": "Shpigel", "picks": ["Spain", "Portugal", "Norway", "Uruguay", "Switzerland", "Senegal", "Canada", "Egypt", "South Korea", "Saudi Arabia", "Iraq", "Cape Verde"], "goalsPred": 280, "sheetScore": 10}], "flags": {"Argentina": "🇦🇷", "England": "🏴", "France": "🇫🇷", "Spain": "🇪🇸", "Brazil": "🇧🇷", "Germany": "🇩🇪", "Netherlands": "🇳🇱", "Portugal": "🇵🇹", "Belgium": "🇧🇪", "Colombia": "🇨🇴", "Morocco": "🇲🇦", "Norway": "🇳🇴", "Mexico": "🇲🇽", "United States": "🇺🇸", "Uruguay": "🇺🇾", "Japan": "🇯🇵", "Croatia": "🇭🇷", "Switzerland": "🇨🇭", "Ecuador": "🇪🇨", "Turkiye": "🇹🇷", "Senegal": "🇸🇳", "Austria": "🇦🇹", "Paraguay": "🇵🇾", "Sweden": "🇸🇪", "Canada": "🇨🇦", "Ivory Coast": "🇨🇮", "Czechia": "🇨🇿", "Scotland": "🏴", "Egypt": "🇪🇬", "Ghana": "🇬🇭", "Algeria": "🇩🇿", "Bosnia and Herzegovina": "🇧🇦", "South Korea": "🇰🇷", "Australia": "🇦🇺", "Tunisia": "🇹🇳", "Iran": "🇮🇷", "Congo DR": "🇨🇩", "Panama": "🇵🇦", "South Africa": "🇿🇦", "Saudi Arabia": "🇸🇦", "New Zealand": "🇳🇿", "Iraq": "🇮🇶", "Qatar": "🇶🇦", "Uzbekistan": "🇺🇿", "Cape Verde": "🇨🇻", "Haiti": "🇭🇹", "Jordan": "🇯🇴", "Curacao": "🇨🇼"}, "knockout": {}, "thirdsAdvanced": [], "eliminated": [], "builtAt": "2026-06-17"};
+/* ====================== ENGINE ====================== */
+const DBL_GROUPS = [9,10,11,12];
+const ADV = {R32:0, R16:16, QF:24, SF:32, F:48, W:64}; // furthest-round milestone (non-cumulative)
+const FINISH = {1:8, 2:4, 3:2, 0:0}; // 3rd only if advanced
+const norm = s => (s||'').trim();
+
+// reverse lookup: team -> ability group number
+const teamGroup = {};
+for(const [g,teams] of Object.entries(DATA.contestGroups)){ teams.forEach(t=>teamGroup[t]=+g); }
+// team -> real WC group letter
+const teamReal = {};
+for(const [L,teams] of Object.entries(DATA.realGroups)){ teams.forEach(t=>teamReal[t]=L); }
+const isDouble = team => DBL_GROUPS.includes(teamGroup[team]);
+
+// load editable results (localStorage overrides snapshot)
+function loadResults(){
+  let r = JSON.parse(JSON.stringify(DATA.matches));
+  try{ const saved = JSON.parse(localStorage.getItem('wc_results')||'{}');
+    r.forEach(m=>{ if(saved[m.id]){ m.hs=saved[m.id].hs; m.as=saved[m.id].as; m.status=saved[m.id].status; } });
+  }catch(e){}
+  return r;
+}
+function saveResult(id,hs,as,status){
+  const saved = JSON.parse(localStorage.getItem('wc_results')||'{}');
+  saved[id]={hs,as,status}; localStorage.setItem('wc_results',JSON.stringify(saved));
+}
+
+// compute group-stage table for a real group letter (memoized per render)
+let GTAB={};
+function invalidateTables(){ GTAB={}; }
+function groupTable(letter, matches){
+  if(GTAB[letter]) return GTAB[letter];
+  const teams = DATA.realGroups[letter];
+  const row = {}; teams.forEach(t=>row[t]={team:t,pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0});
+  matches.filter(m=>m.grp===letter && m.status==='final').forEach(m=>{
+    const h=row[m.home], a=row[m.away]; if(!h||!a)return;
+    h.pld++;a.pld++; h.gf+=m.hs;h.ga+=m.as;a.gf+=m.as;a.ga+=m.hs;
+    if(m.hs>m.as){h.w++;a.l++;h.pts+=3;}
+    else if(m.hs<m.as){a.w++;h.l++;a.pts+=3;}
+    else{h.d++;a.d++;h.pts++;a.pts++;}
+  });
+  const res = teams.map(t=>row[t]).sort((x,y)=> y.pts-x.pts || (y.gf-y.ga)-(x.gf-x.ga) || y.gf-x.gf || x.team.localeCompare(y.team))
+    .map((r,i)=>({...r,pos:i+1,gd:r.gf-r.ga}));
+  GTAB[letter]=res; return res;
+}
+
+// per-team scoring (group stage portion is exact vs sheet; knockouts use DATA.knockout map if present)
+function teamScore(team, matches){
+  const g = teamGroup[team], mult = DBL_GROUPS.includes(g)?2:1;
+  let goals=0, gpts=0, finishBonus=0, advBonus=0, pld=0;
+  matches.filter(m=>(m.home===team||m.away===team) && m.status==='final').forEach(m=>{
+    pld++; const mine = m.home===team?m.hs:m.as, opp = m.home===team?m.as:m.hs;
+    goals+=mine; if(mine>opp)gpts+=3; else if(mine===opp)gpts+=1;
+  });
+  const letter = teamReal[team];
+  const tbl = groupTable(letter, matches);
+  const me = tbl.find(r=>r.team===team);
+  const groupDone = tbl.every(r=>r.pld===3);
+  let pos = me?me.pos:4, advanced=null;
+  if(groupDone){
+    if(pos===1) finishBonus=FINISH[1];
+    else if(pos===2) finishBonus=FINISH[2];
+    else if(pos===3){ // best-thirds resolved externally; assume advances if flagged
+      const adv = (DATA.thirdsAdvanced||[]).includes(team);
+      finishBonus = adv?FINISH[3]:0; advanced = adv;
+    }
+  }
+  // knockout progression (manual map team->furthest round key)
+  const ko = (DATA.knockout||{})[team];
+  if(ko && ADV[ko]!==undefined){ advBonus = ADV[ko]; }
+  const base = goals+gpts+finishBonus+advBonus;
+  return {team, group:g, mult, goals, gpts, finishBonus, advBonus, base, total:base*mult, pld, pos, groupDone};
+}
+
+function portfolioScore(picks, matches){
+  let total=0, goals=0, dbl=0, alive=0, breakdown=[];
+  picks.forEach(t=>{
+    const s=teamScore(t,matches); breakdown.push(s);
+    total+=s.total; goals+=s.goals; if(s.mult===2)dbl+=s.total;
+    const tbl=groupTable(teamReal[t],matches); const me=tbl.find(r=>r.team===t);
+    const eliminated = me && me.pld===3 && me.pos===4; // simplistic; refined for KO later
+    if(!((DATA.eliminated||[]).includes(t))) alive++;
+  });
+  return {total,goals,dbl,alive,breakdown};
+}
+
+/* ====================== STATE ====================== */
+let MATCHES = loadResults();
+let ENTRANTS = DATA.entrants.slice(); // {name, picks:[12], goalsPred, sheetScore}
+const ME = DATA.me;
+const myEntry = ENTRANTS.find(e=>e.name===ME);
+const MYPICKS = myEntry.picks;
+
+/* ====================== LIVE SHEET FETCH ====================== */
+function csvParse(text){
+  const rows=[]; let i=0,f='',row=[],q=false;
+  while(i<text.length){const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){f+='"';i++;} else q=false;} else f+=c; }
+    else { if(c==='"')q=true; else if(c===','){row.push(f);f='';} else if(c==='\n'||c==='\r'){ if(f!==''||row.length){row.push(f);rows.push(row);row=[];f='';} if(c==='\r'&&text[i+1]==='\n')i++; } else f+=c; }
+    i++;
+  }
+  if(f!==''||row.length){row.push(f);rows.push(row);}
+  return rows;
+}
+async function liveRefresh(){
+  const dot=document.getElementById('liveDot'), txt=document.getElementById('liveTxt');
+  txt.textContent='refreshing…';
+  const url=`https://docs.google.com/spreadsheets/d/${DATA.sheet.id}/gviz/tq?tqx=out:csv&gid=${DATA.sheet.gid}`;
+  try{
+    const res=await fetch(url,{cache:'no-store'}); if(!res.ok)throw 0;
+    const rows=csvParse(await res.text());
+    const head=rows[0]; const gi=i=>head.findIndex(h=>norm(h)===i);
+    const idxGoals=gi('Total Goals'), idxScore=gi('Score');
+    const fresh=[];
+    for(let r=1;r<rows.length;r++){
+      const c=rows[r]; if(!norm(c[0]))continue;
+      const picks=[]; for(let g=1;g<=12;g++)picks.push(norm(c[g]));
+      if(picks.filter(Boolean).length<12)continue;
+      fresh.push({name:norm(c[0]),picks,goalsPred:+c[idxGoals]||0,sheetScore:+c[idxScore]||0});
+    }
+    if(fresh.length>=DATA.entrants.length-5){ ENTRANTS=fresh; }
+    dot.classList.add('live'); txt.textContent='live · sheet synced '+new Date().toLocaleTimeString();
+  }catch(e){
+    dot.classList.remove('live'); txt.textContent='offline · using saved snapshot';
+  }
+  renderAll();
+}
+
+/* ====================== OVERLAP / FIELD ====================== */
+function overlapWith(picks){ let n=0; for(let i=0;i<12;i++) if(picks[i]===MYPICKS[i])n++; return n; }
+function fieldStats(){
+  const hist={}; for(let n=0;n<=12;n++)hist[n]=0;
+  let twins=0;
+  ENTRANTS.forEach(e=>{ if(e.name===ME)return; const o=overlapWith(e.picks); hist[o]++; if(o===12)twins++; });
+  // per-group popularity of MY pick
+  const pop=[]; for(let g=0;g<12;g++){
+    const mine=MYPICKS[g]; let same=0; const counts={};
+    ENTRANTS.forEach(e=>{counts[e.picks[g]]=(counts[e.picks[g]]||0)+1; if(e.picks[g]===mine)same++;});
+    const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+    pop.push({group:g+1, mine, samePct:same/ENTRANTS.length, mostPopular:top[0], mostPct:top[1]/ENTRANTS.length});
+  }
+  return {hist,twins,pop};
+}
+
+/* ====================== RENDER ====================== */
+const FLAGS=DATA.flags||{};
+const flag=t=>FLAGS[t]||'⚽';
+let charts={};
+
+function rankings(){
+  const arr=ENTRANTS.map(e=>({...e, overlap:overlapWith(e.picks), live:portfolioScore(e.picks,MATCHES).total}));
+  arr.sort((a,b)=> b.live-a.live || b.sheetScore-a.sheetScore || a.name.localeCompare(b.name));
+  let rank=0,prev=null,seen=0;
+  arr.forEach(e=>{ seen++; if(e.live!==prev){rank=seen;prev=e.live;} e.rank=rank; });
+  return arr;
+}
+
+function renderHeader(){
+  const ranks=rankings(); const me=ranks.find(e=>e.name===ME);
+  const ps=portfolioScore(MYPICKS,MATCHES);
+  document.getElementById('kRank').textContent='#'+me.rank;
+  document.getElementById('kScore').textContent=me.live;
+  document.getElementById('kGoals').textContent=ps.goals;
+  document.getElementById('kAlive').textContent=ps.alive+'/12';
+  document.getElementById('kDbl').textContent=ps.dbl;
+  // standing box
+  const total=ranks.length, pct=Math.round((1-(me.rank-1)/total)*100);
+  const lead=ranks[0];
+  document.getElementById('standBox').innerHTML=
+    `<div style="font-size:30px;font-weight:800">#${me.rank}<span class="muted" style="font-size:15px"> / ${total}</span></div>
+     <div class="muted" style="font-size:13px">Top ${pct}% · <b class="hl">${me.live}</b> live pts <span style="opacity:.7">(sheet shows ${me.sheetScore})</span></div>
+     <div class="muted" style="font-size:12px;margin-top:6px">Live leader: <b>${lead.name}${lead.name===ME?' (you)':''}</b> ${lead.live} · gap ${lead.live-me.live}</div>`;
+  document.getElementById('tbPred').textContent=me.goalsPred;
+}
+
+function renderOverview(){
+  const ps=portfolioScore(MYPICKS,MATCHES);
+  // chart points by team
+  const bd=ps.breakdown.slice().sort((a,b)=>b.total-a.total);
+  const ctx=document.getElementById('ptsByTeam');
+  if(charts.pts)charts.pts.destroy();
+  charts.pts=new Chart(ctx,{type:'bar',data:{labels:bd.map(b=>b.team),datasets:[{
+    data:bd.map(b=>b.total), backgroundColor:bd.map(b=>b.mult===2?'#a855f7':'#38bdf8'),
+    borderRadius:5}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{
+      const b=bd[c.dataIndex]; return `${b.total} pts  (×${b.mult}) — ${b.goals}g + ${b.gpts} grp`+(b.finishBonus?` + ${b.finishBonus} finish`:'')+(b.advBonus?` + ${b.advBonus} adv`:'');}}}},
+    scales:{x:{ticks:{color:'#93a0bf',maxRotation:60,minRotation:45}},y:{ticks:{color:'#93a0bf'},grid:{color:'#27304d'}}}}});
+  // tiebreaker actual goals
+  const totalGoals=MATCHES.filter(m=>m.status==='final').reduce((s,m)=>s+m.hs+m.as,0);
+  document.getElementById('tbActual').textContent=totalGoals;
+  const me=rankings().find(e=>e.name===ME);
+  document.getElementById('tbDelta').textContent=`(${me.goalsPred-totalGoals} to go to hit your number)`;
+  // concentration note
+  const byReal={}; MYPICKS.forEach(t=>{const L=teamReal[t];(byReal[L]=byReal[L]||[]).push(t);});
+  const clusters=Object.entries(byReal).filter(([L,a])=>a.length>1).sort((a,b)=>b[1].length-a[1].length);
+  let html='<b>⚠ Concentration check:</b> ';
+  if(clusters.length){
+    html+=clusters.map(([L,a])=>`<b>${a.join(', ')}</b> all sit in real Group ${L}`).join('; ')+'. ';
+    const g=clusters[0];
+    html+=`That means they take points off each other head-to-head — your Group ${g[0]} trio can't all top the table. Upside: if the group is strong, you capture goals from both sides of those matches.`;
+  } else html+='Your picks are spread across different real groups — no head-to-head collisions.';
+  document.getElementById('concentrationNote').innerHTML=html;
+  // mini cards
+  document.getElementById('miniCards').innerHTML=ps.breakdown.map(b=>{
+    const dbl=b.mult===2;
+    return `<div class="card ${dbl?'double':''}">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div><span class="flag">${flag(b.team)}</span><b>${b.team}</b></div>
+        <b style="font-size:18px">${b.total}</b></div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="tag grp">Ability G${b.group}</span>
+        <span class="tag grp">WC ${teamReal[b.team]}</span>
+        ${dbl?'<span class="tag dbl">2× points</span>':''}</div>
+      <div class="bigbreak" style="margin-top:8px">${b.goals} goals · ${b.gpts} grp pts${b.finishBonus?` · +${b.finishBonus}`:''}${b.advBonus?` · +${b.advBonus} adv`:''}</div>
+    </div>`;}).join('');
+}
+
+function renderTeams(){
+  const ps=portfolioScore(MYPICKS,MATCHES);
+  document.getElementById('teamCards').innerHTML=ps.breakdown.map(b=>{
+    const L=teamReal[b.team], tbl=groupTable(L,MATCHES), me=tbl.find(r=>r.team===b.team);
+    const dbl=b.mult===2;
+    const fx=MATCHES.filter(m=>m.home===b.team||m.away===b.team).sort((x,y)=>x.num-y.num);
+    const fxHtml=fx.map(m=>{
+      const opp=m.home===b.team?m.away:m.home, fin=m.status==='final';
+      const mine=m.home===b.team?m.hs:m.as, oth=m.home===b.team?m.as:m.hs;
+      const res=fin?`<b class="${mine>oth?'final':(mine<oth?'':'')}">${mine}–${oth}</b>`:`<span class="muted">${m.date}</span>`;
+      return `<div class="fx"><span class="fxd">MD${m.md}</span>
+        <span class="fxo">vs ${flag(opp)} ${opp}</span>
+        <span class="fxv">📍 ${m.venue}</span>
+        <span class="fxr">${res}</span></div>`;}).join('');
+    let posTag='';
+    if(me){ if(me.pos<=2&&me.pld>0)posTag='<span class="tag alive">'+ordinal(me.pos)+' place</span>';
+      else if(me.pos===3&&me.pld>0)posTag='<span class="tag warn">3rd — bubble</span>';
+      else if(me.pld>0)posTag='<span class="tag out">'+ordinal(me.pos)+' place</span>'; }
+    return `<div class="card ${dbl?'double':''}">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div><span class="flag">${flag(b.team)}</span><b style="font-size:16px">${b.team}</b></div>
+        <b style="font-size:22px">${b.total}<span class="muted" style="font-size:12px"> pts</span></b></div>
+      <div style="margin:8px 0;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="tag grp">Ability G${b.group}</span><span class="tag grp">WC Group ${L}</span>
+        ${dbl?'<span class="tag dbl">2× points</span>':''}${posTag}</div>
+      <table class="grp-table" style="margin:6px 0"><tbody>${tbl.map(r=>`<tr class="${r.team===b.team?'grp-mine':''}">
+        <td class="pos">${r.pos}</td><td>${flag(r.team)} ${r.team}</td>
+        <td class="num">${r.pld}</td><td class="num">${r.gd>0?'+':''}${r.gd}</td><td class="num"><b>${r.pts}</b></td></tr>`).join('')}</tbody></table>
+      <div class="bigbreak">Breakdown: ${b.goals} goals${dbl?' ×2':''} + ${b.gpts} group pts${dbl?' ×2':''}${b.finishBonus?` + ${b.finishBonus} finish`:''}${b.advBonus?` + ${b.advBonus} advance`:''} = <b>${b.total}</b></div>
+      <div class="fxlist">${fxHtml}</div>
+    </div>`;}).join('');
+}
+function ordinal(n){return n+(['th','st','nd','rd'][(n%10>3?0:(n%100-n%10!=10)*n%10)]||'th');}
+
+function renderBracket(){
+  document.getElementById('koStrip').innerHTML=(DATA.koSchedule||[]).map(k=>
+    `<div class="kob"><b>${k.round}</b><span>${k.dates}</span></div>`).join('');
+  const mine=new Set(MYPICKS);
+  const letters=[...new Set(MYPICKS.map(t=>teamReal[t]))].sort();
+  document.getElementById('groupBoards').innerHTML=letters.map(L=>{
+    const tbl=groupTable(L,MATCHES); const myTeams=DATA.realGroups[L].filter(t=>mine.has(t));
+    return `<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <b>Real Group ${L}</b><span class="muted" style="font-size:12px">${myTeams.length} of yours</span></div>
+      <table class="grp-table" style="margin-top:8px"><thead><tr><th class="pos"></th><th>Team</th><th class="num">Pld</th><th class="num">GD</th><th class="num">Pts</th></tr></thead>
+      <tbody>${tbl.map(r=>`<tr class="${mine.has(r.team)?'grp-mine':''}">
+        <td class="pos">${r.pos}</td><td>${flag(r.team)} ${r.team}${mine.has(r.team)?' ●':''}</td>
+        <td class="num">${r.pld}</td><td class="num">${r.gd>0?'+':''}${r.gd}</td><td class="num"><b>${r.pts}</b></td></tr>`).join('')}</tbody></table>
+      <div class="muted" style="font-size:11.5px;margin-top:8px">Top 2 advance automatically · 3rd may sneak in as a best-third</div>
+    </div>`;}).join('');
+  // ladder
+  document.getElementById('ladder').innerHTML=MYPICKS.map(t=>{
+    const dbl=isDouble(t), m=dbl?2:1;
+    const steps=[['Reach R16',ADV.R16],['Quarterfinal',ADV.QF],['Semifinal',ADV.SF],['Final',ADV.F],['Win it all',ADV.W]];
+    return `<div class="card ${dbl?'double':''}">
+      <div><span class="flag">${flag(t)}</span><b>${t}</b> ${dbl?'<span class="tag dbl">2×</span>':''}</div>
+      <div class="path" style="margin-top:8px">${steps.map(s=>`<div class="stage">
+        <span class="badge">${s[0]}</span><span class="muted" style="font-size:11px">milestone</span>
+        <span class="pts">+${s[1]*m}</span></div>`).join('')}</div>
+    </div>`;}).join('');
+}
+
+function renderBoard(){
+  const ranks=rankings();
+  document.getElementById('boardCount').textContent=ranks.length+' entrants';
+  const tb=document.querySelector('#boardTable tbody');
+  tb.innerHTML=ranks.map(e=>{
+    const cls=e.name===ME?'me':(e.overlap>=11?'twin':'');
+    const diff=e.live-e.sheetScore;
+    return `<tr class="${cls}"><td>${e.rank}</td><td>${e.name}${e.name===ME?' ⬅ you':''}</td>
+      <td class="num"><b>${e.live}</b>${diff?` <span style="color:var(--accent);font-size:10px">▲${diff}</span>`:''}</td>
+      <td class="num muted">${e.sheetScore}</td>
+      <td class="num">${e.overlap}/12</td>
+      <td class="num">${e.goalsPred}</td></tr>`;}).join('');
+}
+
+function renderField(){
+  const fs=fieldStats();
+  const twinNames=ENTRANTS.filter(e=>e.name!==ME&&overlapWith(e.picks)===12).map(e=>e.name);
+  const near=ENTRANTS.filter(e=>e.name!==ME&&overlapWith(e.picks)===11).map(e=>e.name);
+  document.getElementById('twinBox').innerHTML=
+    `<div style="font-size:30px;font-weight:800">${fs.twins}<span class="muted" style="font-size:15px"> exact twin${fs.twins===1?'':'s'}</span></div>
+     <div class="muted" style="font-size:13px">${fs.twins?('Identical portfolio: '+twinNames.join(', ')):'Nobody else has your exact 12 — your combination is unique.'}</div>
+     <div class="muted" style="font-size:12.5px;margin-top:6px">${near.length} entrant${near.length===1?'':'s'} share 11/12${near.length?': '+near.slice(0,6).join(', ')+(near.length>6?'…':''):''}</div>`;
+  const ctx=document.getElementById('overlapHist');
+  if(charts.hist)charts.hist.destroy();
+  const labels=Object.keys(fs.hist), vals=labels.map(k=>fs.hist[k]);
+  charts.hist=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:vals,backgroundColor:labels.map(k=>+k>=11?'#fbbf24':'#38bdf8'),borderRadius:4}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>c[0].label+' shared picks'}}},
+    scales:{x:{ticks:{color:'#93a0bf'},grid:{display:false},title:{display:true,text:'picks shared with you',color:'#93a0bf',font:{size:11}}},y:{ticks:{color:'#93a0bf'},grid:{color:'#27304d'}}}}});
+  // pop bars
+  document.getElementById('popBars').innerHTML=fs.pop.map(p=>{
+    const dbl=DBL_GROUPS.includes(p.group), pct=Math.round(p.samePct*100);
+    const col=pct>=50?'#4ade80':pct>=25?'#38bdf8':'#fb923c';
+    return `<div class="barrow"><div class="lbl">${flag(p.mine)} ${p.mine}${dbl?' <span class="tag dbl" style="padding:0 5px">2×</span>':''}</div>
+      <div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div>
+      <div class="val">${pct}%</div></div>`;}).join('');
+  renderPopularBuilds();
+  // pop table
+  document.getElementById('popTable').innerHTML=
+    `<table><thead><tr><th>Ability Group</th><th>Your pick</th><th class="num">Field on yours</th><th>Field favorite</th><th class="num">Its share</th></tr></thead>
+     <tbody>${fs.pop.map(p=>`<tr><td>G${p.group}${DBL_GROUPS.includes(p.group)?' <span class="tag dbl">2×</span>':''}</td>
+       <td>${flag(p.mine)} ${p.mine}</td><td class="num">${Math.round(p.samePct*100)}%</td>
+       <td>${flag(p.mostPopular)} ${p.mostPopular}${p.mostPopular===p.mine?' ✓':''}</td><td class="num">${Math.round(p.mostPct*100)}%</td></tr>`).join('')}</tbody></table>`;
+}
+
+// count how many entrants share a combo over given 0-based pick indices
+function comboCounts(idxs){
+  const map=new Map();
+  ENTRANTS.forEach(e=>{ const k=idxs.map(i=>e.picks[i]); const key=k.join(' • ');
+    map.set(key,(map.get(key)||0)+1); });
+  const mineKey=idxs.map(i=>MYPICKS[i]).join(' • ');
+  const arr=[...map.entries()].map(([key,n])=>({key,n,mine:key===mineKey}))
+    .sort((a,b)=>b.n-a.n || a.key.localeCompare(b.key));
+  return {arr, mineKey, mineCount:map.get(mineKey)||0, mineRank:arr.findIndex(x=>x.mine)+1, total:ENTRANTS.length};
+}
+function comboRows(idxs, topN){
+  const {arr,total,mineRank,mineCount}=comboCounts(idxs);
+  const max=arr[0].n;
+  let rows=arr.slice(0,topN);
+  if(mineRank>topN){ rows=rows.concat([{key:idxs.map(i=>MYPICKS[i]).join(' • '),n:mineCount,mine:true,_r:mineRank}]); }
+  const fmt=k=>k.split(' • ').map(t=>flag(t)+' '+t).join('  ');
+  return rows.map((r,i)=>{
+    const rk=r._r||i+1;
+    return `<div class="combo ${r.mine?'mine':''}">
+      <span class="rk">${rk}</span>
+      <span class="ck">${fmt(r.key)}${r.mine?' ← you':''}</span>
+      <span class="track"><span class="fill" style="width:${Math.round(100*r.n/max)}%"></span></span>
+      <span class="cn">${r.n} · ${Math.round(100*r.n/total)}%</span></div>`;
+  }).join('');
+}
+
+function renderPopularBuilds(){
+  // consensus / chalk build
+  const con=[];
+  for(let g=0;g<12;g++){ const c={}; ENTRANTS.forEach(e=>c[e.picks[g]]=(c[e.picks[g]]||0)+1);
+    const top=Object.entries(c).sort((a,b)=>b[1]-a[1])[0]; con.push({team:top[0],n:top[1]}); }
+  const total=ENTRANTS.length;
+  let myMatch=0;
+  document.getElementById('consensusBuild').innerHTML=con.map((c,g)=>{
+    const dbl=DBL_GROUPS.includes(g+1), mine=MYPICKS[g], match=mine===c.team; if(match)myMatch++;
+    return `<div class="chip ${match?'match':'diff'} ${dbl?'dbl':''}">
+      <div class="chip-h">G${g+1}${dbl?' · 2×':''}</div>
+      <div>${flag(c.team)} ${c.team}</div>
+      <div class="chip-pct">${Math.round(100*c.n/total)}% of field</div>
+      ${match?'':`<div class="chip-mine">you: ${flag(mine)} ${mine}</div>`}</div>`;
+  }).join('');
+  document.getElementById('chalkAlign').textContent=`You're on the chalk in ${myMatch} of 12 groups`;
+  // how close the field clusters to its own chalk
+  const dist={}; ENTRANTS.forEach(e=>{ let m=0; for(let g=0;g<12;g++) if(e.picks[g]===con[g].team)m++; dist[m]=(dist[m]||0)+1; });
+  const maxMatch=Math.max(...Object.keys(dist).map(Number));
+  const fullChalk=dist[12]||0;
+  document.getElementById('consensusNote').innerHTML=
+    `Nobody owns the full chalk build${fullChalk?'':' — the closest anyone gets is '+maxMatch+'/12'}. ` +
+    `The double-points groups are where the field agrees most (Korea at ${Math.round(100*con[8].n/total)}%) and disagrees most ` +
+    `(Group 10 favorite ${con[9].team} only ${Math.round(100*con[9].n/total)}%).`;
+  // top double blocks (idx 8-11) and title pairs (idx 0-1)
+  document.getElementById('dblBlocks').innerHTML=comboRows([8,9,10,11],6);
+  document.getElementById('titlePairs').innerHTML=comboRows([0,1],6);
+  renderArchetypes();
+}
+
+function renderArchetypes(){
+  const sel=document.getElementById('campDim'); const v=sel?sel.value:'1';
+  const idxs = v==='1'?[0] : v==='block'?[8,9,10,11] : [0,1];
+  const map=new Map();
+  ENTRANTS.forEach(e=>{ const key=idxs.map(i=>e.picks[i]).join(' • ');
+    if(!map.has(key))map.set(key,[]); map.get(key).push(e); });
+  const mineKey=idxs.map(i=>MYPICKS[i]).join(' • ');
+  const total=ENTRANTS.length;
+  let camps=[...map.entries()].map(([key,members])=>{
+    const sc=members.map(m=>m.sheetScore);
+    const rep=[]; for(let g=0;g<12;g++){const c={};members.forEach(m=>c[m.picks[g]]=(c[m.picks[g]]||0)+1);
+      rep.push(Object.entries(c).sort((a,b)=>b[1]-a[1])[0][0]);}
+    return {key,n:members.length,avg:sc.reduce((a,b)=>a+b,0)/members.length,
+      best:Math.max(...sc),rep,mine:key===mineKey,members};
+  }).sort((a,b)=> b.n-a.n || b.avg-a.avg);
+  const top=camps.slice(0, v==='block'?8:(v==='2'?8:6));
+  if(!top.some(c=>c.mine)){ const mc=camps.find(c=>c.mine); if(mc)top.push(mc); }
+  document.getElementById('archetypes').innerHTML=top.map(c=>{
+    const keyHtml=c.key.split(' • ').map(t=>flag(t)+' '+t).join(' + ');
+    let myrank='';
+    if(c.mine){ const r=c.members.slice().sort((a,b)=>b.sheetScore-a.sheetScore).findIndex(m=>m.name===ME)+1;
+      myrank=`<span class="tag alive">you · #${r} of ${c.n}</span>`; }
+    const strip=c.rep.map((t,g)=>`<span class="${DBL_GROUPS.includes(g+1)?'dbl':''}" title="G${g+1}: ${t}">${flag(t)}</span>`).join('');
+    return `<div class="card ${c.mine?'double':''}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+        <b style="font-size:14px">${keyHtml}</b>
+        <span class="muted" style="font-size:12px;white-space:nowrap">${c.n} · ${Math.round(100*c.n/total)}%</span></div>
+      <div style="margin:7px 0;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="tag grp">avg ${c.avg.toFixed(1)} pts</span>
+        <span class="tag grp">best ${c.best}</span>${myrank}</div>
+      <div class="muted" style="font-size:11px">Representative build (modal pick per group):</div>
+      <div class="repstrip">${strip}</div>
+    </div>`;}).join('');
+}
+
+function renderResults(){
+  const byMd={}; MATCHES.forEach(m=>{(byMd[m.md]=byMd[m.md]||[]).push(m);});
+  document.getElementById('resultsList').innerHTML=Object.keys(byMd).sort().map(md=>{
+    const lbl=+md<=3?('Group Stage — Matchday '+md):('Knockout '+md);
+    return `<h2 class="sec">${lbl}</h2><div class="panel">${byMd[md].map(m=>{
+      const mineH=MYPICKS.includes(m.home), mineA=MYPICKS.includes(m.away);
+      return `<div class="matchrow">
+        <span class="md">${m.grp?'Grp '+m.grp:''}</span>
+        <span style="flex:1;text-align:right ${mineH?';font-weight:700':''}">${flag(m.home)} ${m.home}${mineH?' ●':''}</span>
+        <input class="scorein" data-id="${m.id}" data-side="h" value="${m.status==='final'?m.hs:''}" placeholder="-">
+        <span class="vs">v</span>
+        <input class="scorein" data-id="${m.id}" data-side="a" value="${m.status==='final'?m.as:''}" placeholder="-">
+        <span style="flex:1 ${mineA?';font-weight:700':''}">${m.away} ${flag(m.away)}${mineA?' ●':''}</span>
+        <span class="muted" style="font-size:11px;min-width:168px;text-align:right">${m.date} · 📍${m.venue}${m.status==='final'?' · <span class="final">final</span>':''}</span>
+      </div>`;}).join('')}</div>`;}).join('');
+  document.querySelectorAll('.scorein').forEach(inp=>inp.addEventListener('change',e=>{
+    const id=e.target.dataset.id, m=MATCHES.find(x=>x.id===id);
+    const h=document.querySelector(`.scorein[data-id="${id}"][data-side="h"]`).value;
+    const a=document.querySelector(`.scorein[data-id="${id}"][data-side="a"]`).value;
+    if(h!==''&&a!==''){ m.hs=+h;m.as=+a;m.status='final'; saveResult(id,+h,+a,'final'); }
+    else { m.status='scheduled'; saveResult(id,null,null,'scheduled'); }
+    renderAll();
+  }));
+}
+
+function renderAll(){ invalidateTables(); renderHeader(); renderOverview(); renderTeams(); renderBracket(); renderBoard(); renderField(); renderResults(); }
+
+/* ====================== NAV ====================== */
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active'); document.getElementById('v-'+t.dataset.v).classList.add('active');
+}));
+document.getElementById('refreshBtn').addEventListener('click',liveRefresh);
+document.getElementById('campDim').addEventListener('change',renderArchetypes);
+document.getElementById('builtAt').textContent=' · snapshot '+DATA.builtAt;
+
+renderAll();
+liveRefresh();
+</script>
+</body>
+</html>

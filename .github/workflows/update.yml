@@ -1,0 +1,61 @@
+name: Update, Build & Deploy Boorstein Tracker
+
+# Hourly: refresh sheet standings + live match results, rebuild, deploy to Pages.
+# - Add repo secret DC_FOOTBALL_TOKEN (free football-data.org key) for best results,
+#   or leave unset to use the keyless TheSportsDB fallback.
+# - Requires Settings > Actions > General > Workflow permissions = Read and write.
+on:
+  schedule:
+    - cron: "7 * * * *"   # hourly at :07 (GitHub honors hourly more reliably than */30)
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Refresh sheet + live results, rebuild
+        env:
+          DC_FOOTBALL_TOKEN: ${{ secrets.DC_FOOTBALL_TOKEN }}
+        run: python3 scripts/update_results.py
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name "boorstein-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/standings.csv data/results.json data/*.json index.html
+          git commit -m "auto: refresh $(date -u +%FT%TZ)" || echo "no changes"
+          git push || echo "nothing to push"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
