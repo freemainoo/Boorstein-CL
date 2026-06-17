@@ -430,9 +430,9 @@
       "venue": "Dallas",
       "home": "England",
       "away": "Croatia",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 4,
+      "as": 2
     },
     {
       "id": "m23",
@@ -443,9 +443,9 @@
       "venue": "Houston",
       "home": "Portugal",
       "away": "Congo DR",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 1
     },
     {
       "id": "m24",
