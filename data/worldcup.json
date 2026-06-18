@@ -469,9 +469,9 @@
       "venue": "Atlanta",
       "home": "Czechia",
       "away": "South Africa",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 1
     },
     {
       "id": "m26",
@@ -482,9 +482,9 @@
       "venue": "Los Angeles",
       "home": "Switzerland",
       "away": "Bosnia and Herzegovina",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 4,
+      "as": 1
     },
     {
       "id": "m27",
