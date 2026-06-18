@@ -417,9 +417,9 @@
       "venue": "Toronto",
       "home": "Ghana",
       "away": "Panama",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 0
     },
     {
       "id": "m22",
@@ -456,9 +456,9 @@
       "venue": "Mexico City",
       "home": "Uzbekistan",
       "away": "Colombia",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 3
     },
     {
       "id": "m25",
