@@ -495,9 +495,9 @@
       "venue": "Vancouver",
       "home": "Canada",
       "away": "Qatar",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 6,
+      "as": 0
     },
     {
       "id": "m28",
@@ -508,9 +508,9 @@
       "venue": "Guadalajara",
       "home": "Mexico",
       "away": "South Korea",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 0
     },
     {
       "id": "m29",
