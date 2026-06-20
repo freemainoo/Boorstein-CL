@@ -521,9 +521,9 @@
       "venue": "Philadelphia",
       "home": "Brazil",
       "away": "Haiti",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 3,
+      "as": 0
     },
     {
       "id": "m30",
@@ -534,9 +534,9 @@
       "venue": "Boston",
       "home": "Scotland",
       "away": "Morocco",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 1
     },
     {
       "id": "m31",
@@ -547,9 +547,9 @@
       "venue": "SF Bay Area",
       "home": "Turkiye",
       "away": "Paraguay",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 1
     },
     {
       "id": "m32",
