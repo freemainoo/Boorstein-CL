@@ -599,9 +599,9 @@
       "venue": "Houston",
       "home": "Netherlands",
       "away": "Sweden",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 5,
+      "as": 1
     },
     {
       "id": "m36",
