@@ -573,9 +573,9 @@
       "venue": "Toronto",
       "home": "Germany",
       "away": "Ivory Coast",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 2,
+      "as": 1
     },
     {
       "id": "m34",
@@ -586,9 +586,9 @@
       "venue": "Kansas City",
       "home": "Ecuador",
       "away": "Curacao",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 0
     },
     {
       "id": "m35",
@@ -612,9 +612,9 @@
       "venue": "Monterrey",
       "home": "Tunisia",
       "away": "Japan",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 4
     },
     {
       "id": "m37",
