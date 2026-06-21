@@ -638,9 +638,9 @@
       "venue": "Atlanta",
       "home": "Spain",
       "away": "Saudi Arabia",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 4,
+      "as": 0
     },
     {
       "id": "m39",
@@ -651,9 +651,9 @@
       "venue": "Los Angeles",
       "home": "Belgium",
       "away": "Iran",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 0
     },
     {
       "id": "m40",
