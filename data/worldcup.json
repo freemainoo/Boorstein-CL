@@ -703,9 +703,9 @@
       "venue": "Dallas",
       "home": "Argentina",
       "away": "Austria",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 2,
+      "as": 0
     },
     {
       "id": "m44",
