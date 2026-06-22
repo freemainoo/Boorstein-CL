@@ -625,9 +625,9 @@
       "venue": "Miami",
       "home": "Uruguay",
       "away": "Cape Verde",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 2,
+      "as": 2
     },
     {
       "id": "m38",
@@ -664,9 +664,9 @@
       "venue": "Vancouver",
       "home": "New Zealand",
       "away": "Egypt",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 3
     },
     {
       "id": "m41",
