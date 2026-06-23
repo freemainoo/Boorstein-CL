@@ -677,9 +677,9 @@
       "venue": "New York NJ",
       "home": "Norway",
       "away": "Senegal",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 3,
+      "as": 2
     },
     {
       "id": "m42",
@@ -690,9 +690,9 @@
       "venue": "Philadelphia",
       "home": "France",
       "away": "Iraq",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 3,
+      "as": 0
     },
     {
       "id": "m43",
@@ -716,9 +716,9 @@
       "venue": "SF Bay Area",
       "home": "Jordan",
       "away": "Algeria",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 2
     },
     {
       "id": "m45",
