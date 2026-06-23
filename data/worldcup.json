@@ -729,9 +729,9 @@
       "venue": "Boston",
       "home": "England",
       "away": "Ghana",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 0
     },
     {
       "id": "m46",
@@ -755,9 +755,9 @@
       "venue": "Houston",
       "home": "Portugal",
       "away": "Uzbekistan",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 5,
+      "as": 0
     },
     {
       "id": "m48",
