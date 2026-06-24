@@ -807,9 +807,9 @@
       "venue": "Vancouver",
       "home": "Switzerland",
       "away": "Canada",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 2,
+      "as": 1
     },
     {
       "id": "m52",
@@ -820,9 +820,9 @@
       "venue": "Seattle",
       "home": "Bosnia and Herzegovina",
       "away": "Qatar",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 3,
+      "as": 1
     },
     {
       "id": "m53",
