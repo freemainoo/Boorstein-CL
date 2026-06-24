@@ -742,9 +742,9 @@
       "venue": "Toronto",
       "home": "Panama",
       "away": "Croatia",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 1
     },
     {
       "id": "m47",
@@ -768,9 +768,9 @@
       "venue": "Guadalajara",
       "home": "Congo DR",
       "away": "Colombia",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 1
     },
     {
       "id": "m49",
