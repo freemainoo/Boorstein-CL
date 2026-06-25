@@ -859,9 +859,9 @@
       "venue": "Philadelphia",
       "home": "Curacao",
       "away": "Ivory Coast",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 2
     },
     {
       "id": "m56",
@@ -872,9 +872,9 @@
       "venue": "New York NJ",
       "home": "Ecuador",
       "away": "Germany",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 2,
+      "as": 1
     },
     {
       "id": "m57",
