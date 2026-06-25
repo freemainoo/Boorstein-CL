@@ -781,9 +781,9 @@
       "venue": "Miami",
       "home": "Scotland",
       "away": "Brazil",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 3
     },
     {
       "id": "m50",
@@ -794,9 +794,9 @@
       "venue": "Atlanta",
       "home": "Morocco",
       "away": "Haiti",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 4,
+      "as": 2
     },
     {
       "id": "m51",
@@ -833,9 +833,9 @@
       "venue": "Mexico City",
       "home": "Czechia",
       "away": "Mexico",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 3
     },
     {
       "id": "m54",
@@ -846,9 +846,9 @@
       "venue": "Monterrey",
       "home": "South Africa",
       "away": "South Korea",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 0
     },
     {
       "id": "m55",
