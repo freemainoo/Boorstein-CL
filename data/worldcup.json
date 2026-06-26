@@ -885,9 +885,9 @@
       "venue": "Dallas",
       "home": "Japan",
       "away": "Sweden",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 1
     },
     {
       "id": "m58",
@@ -898,9 +898,9 @@
       "venue": "Kansas City",
       "home": "Netherlands",
       "away": "Tunisia",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 3,
+      "as": 1
     },
     {
       "id": "m59",
@@ -911,9 +911,9 @@
       "venue": "Los Angeles",
       "home": "Turkiye",
       "away": "United States",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 3,
+      "as": 2
     },
     {
       "id": "m60",
@@ -924,9 +924,9 @@
       "venue": "SF Bay Area",
       "home": "Paraguay",
       "away": "Australia",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 0
     },
     {
       "id": "m61",
