@@ -937,9 +937,9 @@
       "venue": "Boston",
       "home": "Norway",
       "away": "France",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 4
     },
     {
       "id": "m62",
@@ -950,9 +950,9 @@
       "venue": "Toronto",
       "home": "Senegal",
       "away": "Iraq",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 5,
+      "as": 0
     },
     {
       "id": "m63",
