@@ -963,9 +963,9 @@
       "venue": "Seattle",
       "home": "Egypt",
       "away": "Iran",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 1
     },
     {
       "id": "m64",
@@ -976,9 +976,9 @@
       "venue": "Vancouver",
       "home": "New Zealand",
       "away": "Belgium",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 1,
+      "as": 5
     },
     {
       "id": "m65",
@@ -989,9 +989,9 @@
       "venue": "Houston",
       "home": "Cape Verde",
       "away": "Saudi Arabia",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 0
     },
     {
       "id": "m66",
@@ -1002,9 +1002,9 @@
       "venue": "Guadalajara",
       "home": "Uruguay",
       "away": "Spain",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 1
     },
     {
       "id": "m67",
