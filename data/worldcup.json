@@ -1015,9 +1015,9 @@
       "venue": "New York NJ",
       "home": "Panama",
       "away": "England",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 0,
+      "as": 2
     },
     {
       "id": "m68",
@@ -1028,9 +1028,9 @@
       "venue": "Philadelphia",
       "home": "Croatia",
       "away": "Ghana",
-      "status": "scheduled",
-      "hs": null,
-      "as": null
+      "status": "final",
+      "hs": 2,
+      "as": 1
     },
     {
       "id": "m69",
