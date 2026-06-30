@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-30T20:40:56.412909+00:00",
+  "updated": "2026-06-30T21:06:19.797115+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -290,5 +290,177 @@
       3,
       3
     ]
-  }
+  },
+  "knockout": [
+    {
+      "round": "R32",
+      "home": "South Africa",
+      "away": "Canada",
+      "hs": 0,
+      "as": 1,
+      "status": "final",
+      "pkWinner": null,
+      "date": "2026-06-28"
+    },
+    {
+      "round": "R32",
+      "home": "Brazil",
+      "away": "Japan",
+      "hs": 2,
+      "as": 1,
+      "status": "final",
+      "pkWinner": null,
+      "date": "2026-06-29"
+    },
+    {
+      "round": "R32",
+      "home": "Germany",
+      "away": "Paraguay",
+      "hs": 4,
+      "as": 5,
+      "status": "final",
+      "pkWinner": "Paraguay",
+      "date": "2026-06-29"
+    },
+    {
+      "round": "R32",
+      "home": "Netherlands",
+      "away": "Morocco",
+      "hs": 3,
+      "as": 4,
+      "status": "final",
+      "pkWinner": "Morocco",
+      "date": "2026-06-30"
+    },
+    {
+      "round": "R32",
+      "home": "Ivory Coast",
+      "away": "Norway",
+      "hs": 1,
+      "as": 2,
+      "status": "final",
+      "pkWinner": null,
+      "date": "2026-06-30"
+    },
+    {
+      "round": "R32",
+      "home": "France",
+      "away": "Sweden",
+      "hs": 0,
+      "as": 0,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-06-30"
+    },
+    {
+      "round": "R32",
+      "home": "Mexico",
+      "away": "Ecuador",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-01"
+    },
+    {
+      "round": "R32",
+      "home": "England",
+      "away": "Congo DR",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-01"
+    },
+    {
+      "round": "R32",
+      "home": "Belgium",
+      "away": "Senegal",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-01"
+    },
+    {
+      "round": "R32",
+      "home": "United States",
+      "away": "Bosnia and Herzegovina",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-02"
+    },
+    {
+      "round": "R32",
+      "home": "Spain",
+      "away": "Austria",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-02"
+    },
+    {
+      "round": "R32",
+      "home": "Portugal",
+      "away": "Croatia",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-02"
+    },
+    {
+      "round": "R32",
+      "home": "Switzerland",
+      "away": "Algeria",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-03"
+    },
+    {
+      "round": "R32",
+      "home": "Australia",
+      "away": "Egypt",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-03"
+    },
+    {
+      "round": "R32",
+      "home": "Argentina",
+      "away": "Cape Verde",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-03"
+    },
+    {
+      "round": "R32",
+      "home": "Colombia",
+      "away": "Ghana",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-04"
+    },
+    {
+      "round": "R16",
+      "home": "Canada",
+      "away": "Morocco",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-04"
+    }
+  ]
 }

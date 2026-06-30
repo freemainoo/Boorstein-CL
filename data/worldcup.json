@@ -159,7 +159,10 @@
       "away": "South Africa",
       "status": "final",
       "hs": 2,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m2",
@@ -172,7 +175,10 @@
       "away": "Czechia",
       "status": "final",
       "hs": 2,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m3",
@@ -185,7 +191,10 @@
       "away": "Bosnia and Herzegovina",
       "status": "final",
       "hs": 1,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m4",
@@ -198,7 +207,10 @@
       "away": "Paraguay",
       "status": "final",
       "hs": 4,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m5",
@@ -211,7 +223,10 @@
       "away": "Scotland",
       "status": "final",
       "hs": 0,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m6",
@@ -224,7 +239,10 @@
       "away": "Turkiye",
       "status": "final",
       "hs": 2,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m7",
@@ -237,7 +255,10 @@
       "away": "Morocco",
       "status": "final",
       "hs": 1,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m8",
@@ -250,7 +271,10 @@
       "away": "Switzerland",
       "status": "final",
       "hs": 1,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m9",
@@ -263,7 +287,10 @@
       "away": "Ecuador",
       "status": "final",
       "hs": 1,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m10",
@@ -276,7 +303,10 @@
       "away": "Curacao",
       "status": "final",
       "hs": 7,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m11",
@@ -289,7 +319,10 @@
       "away": "Japan",
       "status": "final",
       "hs": 2,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m12",
@@ -302,7 +335,10 @@
       "away": "Tunisia",
       "status": "final",
       "hs": 5,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m13",
@@ -315,7 +351,10 @@
       "away": "Uruguay",
       "status": "final",
       "hs": 1,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m14",
@@ -328,7 +367,10 @@
       "away": "Cape Verde",
       "status": "final",
       "hs": 0,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m15",
@@ -341,7 +383,10 @@
       "away": "New Zealand",
       "status": "final",
       "hs": 2,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m16",
@@ -354,7 +399,10 @@
       "away": "Egypt",
       "status": "final",
       "hs": 1,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m17",
@@ -367,7 +415,10 @@
       "away": "Senegal",
       "status": "final",
       "hs": 3,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m18",
@@ -380,7 +431,10 @@
       "away": "Norway",
       "status": "final",
       "hs": 1,
-      "as": 4
+      "as": 4,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m19",
@@ -393,7 +447,10 @@
       "away": "Algeria",
       "status": "final",
       "hs": 3,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m20",
@@ -406,7 +463,10 @@
       "away": "Jordan",
       "status": "final",
       "hs": 3,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m21",
@@ -419,7 +479,10 @@
       "away": "Panama",
       "status": "final",
       "hs": 1,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m22",
@@ -432,7 +495,10 @@
       "away": "Croatia",
       "status": "final",
       "hs": 4,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m23",
@@ -445,7 +511,10 @@
       "away": "Congo DR",
       "status": "final",
       "hs": 1,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m24",
@@ -458,7 +527,10 @@
       "away": "Colombia",
       "status": "final",
       "hs": 1,
-      "as": 3
+      "as": 3,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m25",
@@ -471,7 +543,10 @@
       "away": "South Africa",
       "status": "final",
       "hs": 1,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m26",
@@ -484,7 +559,10 @@
       "away": "Bosnia and Herzegovina",
       "status": "final",
       "hs": 4,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m27",
@@ -497,7 +575,10 @@
       "away": "Qatar",
       "status": "final",
       "hs": 6,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m28",
@@ -510,7 +591,10 @@
       "away": "South Korea",
       "status": "final",
       "hs": 1,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m29",
@@ -523,7 +607,10 @@
       "away": "Haiti",
       "status": "final",
       "hs": 3,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m30",
@@ -536,7 +623,10 @@
       "away": "Morocco",
       "status": "final",
       "hs": 0,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m31",
@@ -549,7 +639,10 @@
       "away": "Paraguay",
       "status": "final",
       "hs": 0,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m32",
@@ -562,7 +655,10 @@
       "away": "Australia",
       "status": "final",
       "hs": 2,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m33",
@@ -575,7 +671,10 @@
       "away": "Ivory Coast",
       "status": "final",
       "hs": 2,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m34",
@@ -588,7 +687,10 @@
       "away": "Curacao",
       "status": "final",
       "hs": 0,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m35",
@@ -601,7 +703,10 @@
       "away": "Sweden",
       "status": "final",
       "hs": 5,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m36",
@@ -614,7 +719,10 @@
       "away": "Japan",
       "status": "final",
       "hs": 0,
-      "as": 4
+      "as": 4,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m37",
@@ -627,7 +735,10 @@
       "away": "Cape Verde",
       "status": "final",
       "hs": 2,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m38",
@@ -640,7 +751,10 @@
       "away": "Saudi Arabia",
       "status": "final",
       "hs": 4,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m39",
@@ -653,7 +767,10 @@
       "away": "Iran",
       "status": "final",
       "hs": 0,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m40",
@@ -666,7 +783,10 @@
       "away": "Egypt",
       "status": "final",
       "hs": 1,
-      "as": 3
+      "as": 3,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m41",
@@ -679,7 +799,10 @@
       "away": "Senegal",
       "status": "final",
       "hs": 3,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m42",
@@ -692,7 +815,10 @@
       "away": "Iraq",
       "status": "final",
       "hs": 3,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m43",
@@ -705,7 +831,10 @@
       "away": "Austria",
       "status": "final",
       "hs": 2,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m44",
@@ -718,7 +847,10 @@
       "away": "Algeria",
       "status": "final",
       "hs": 1,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m45",
@@ -731,7 +863,10 @@
       "away": "Ghana",
       "status": "final",
       "hs": 0,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m46",
@@ -744,7 +879,10 @@
       "away": "Croatia",
       "status": "final",
       "hs": 0,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m47",
@@ -757,7 +895,10 @@
       "away": "Uzbekistan",
       "status": "final",
       "hs": 5,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m48",
@@ -770,7 +911,10 @@
       "away": "Colombia",
       "status": "final",
       "hs": 0,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m49",
@@ -783,7 +927,10 @@
       "away": "Brazil",
       "status": "final",
       "hs": 0,
-      "as": 3
+      "as": 3,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m50",
@@ -796,7 +943,10 @@
       "away": "Haiti",
       "status": "final",
       "hs": 4,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m51",
@@ -809,7 +959,10 @@
       "away": "Canada",
       "status": "final",
       "hs": 2,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m52",
@@ -822,7 +975,10 @@
       "away": "Qatar",
       "status": "final",
       "hs": 3,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m53",
@@ -835,7 +991,10 @@
       "away": "Mexico",
       "status": "final",
       "hs": 0,
-      "as": 3
+      "as": 3,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m54",
@@ -848,7 +1007,10 @@
       "away": "South Korea",
       "status": "final",
       "hs": 1,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m55",
@@ -861,7 +1023,10 @@
       "away": "Ivory Coast",
       "status": "final",
       "hs": 0,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m56",
@@ -874,7 +1039,10 @@
       "away": "Germany",
       "status": "final",
       "hs": 2,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m57",
@@ -887,7 +1055,10 @@
       "away": "Sweden",
       "status": "final",
       "hs": 1,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m58",
@@ -900,7 +1071,10 @@
       "away": "Tunisia",
       "status": "final",
       "hs": 3,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m59",
@@ -913,7 +1087,10 @@
       "away": "United States",
       "status": "final",
       "hs": 3,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m60",
@@ -926,7 +1103,10 @@
       "away": "Australia",
       "status": "final",
       "hs": 0,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m61",
@@ -939,7 +1119,10 @@
       "away": "France",
       "status": "final",
       "hs": 1,
-      "as": 4
+      "as": 4,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m62",
@@ -952,7 +1135,10 @@
       "away": "Iraq",
       "status": "final",
       "hs": 5,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m63",
@@ -965,7 +1151,10 @@
       "away": "Iran",
       "status": "final",
       "hs": 1,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m64",
@@ -978,7 +1167,10 @@
       "away": "Belgium",
       "status": "final",
       "hs": 1,
-      "as": 5
+      "as": 5,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m65",
@@ -991,7 +1183,10 @@
       "away": "Saudi Arabia",
       "status": "final",
       "hs": 0,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m66",
@@ -1004,7 +1199,10 @@
       "away": "Spain",
       "status": "final",
       "hs": 0,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m67",
@@ -1017,7 +1215,10 @@
       "away": "England",
       "status": "final",
       "hs": 0,
-      "as": 2
+      "as": 2,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m68",
@@ -1030,7 +1231,10 @@
       "away": "Ghana",
       "status": "final",
       "hs": 2,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m69",
@@ -1043,7 +1247,10 @@
       "away": "Austria",
       "status": "final",
       "hs": 3,
-      "as": 3
+      "as": 3,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m70",
@@ -1056,7 +1263,10 @@
       "away": "Argentina",
       "status": "final",
       "hs": 1,
-      "as": 3
+      "as": 3,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m71",
@@ -1069,7 +1279,10 @@
       "away": "Portugal",
       "status": "final",
       "hs": 0,
-      "as": 0
+      "as": 0,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
     },
     {
       "id": "m72",
@@ -1082,7 +1295,282 @@
       "away": "Uzbekistan",
       "status": "final",
       "hs": 3,
-      "as": 1
+      "as": 1,
+      "pk": false,
+      "pkWinner": null,
+      "round": null
+    },
+    {
+      "id": "k_R32_Canada_SouthAfrica",
+      "num": 900,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-06-28",
+      "venue": "",
+      "home": "South Africa",
+      "away": "Canada",
+      "hs": 0,
+      "as": 1,
+      "status": "final",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Brazil_Japan",
+      "num": 901,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-06-29",
+      "venue": "",
+      "home": "Brazil",
+      "away": "Japan",
+      "hs": 2,
+      "as": 1,
+      "status": "final",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Germany_Paraguay",
+      "num": 902,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-06-29",
+      "venue": "",
+      "home": "Germany",
+      "away": "Paraguay",
+      "hs": 4,
+      "as": 5,
+      "status": "final",
+      "pk": true,
+      "pkWinner": "Paraguay"
+    },
+    {
+      "id": "k_R32_Morocco_Netherlands",
+      "num": 903,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-06-30",
+      "venue": "",
+      "home": "Netherlands",
+      "away": "Morocco",
+      "hs": 3,
+      "as": 4,
+      "status": "final",
+      "pk": true,
+      "pkWinner": "Morocco"
+    },
+    {
+      "id": "k_R32_IvoryCoast_Norway",
+      "num": 904,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-06-30",
+      "venue": "",
+      "home": "Ivory Coast",
+      "away": "Norway",
+      "hs": 1,
+      "as": 2,
+      "status": "final",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_France_Sweden",
+      "num": 905,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-06-30",
+      "venue": "",
+      "home": "France",
+      "away": "Sweden",
+      "hs": 0,
+      "as": 0,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Ecuador_Mexico",
+      "num": 906,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-01",
+      "venue": "",
+      "home": "Mexico",
+      "away": "Ecuador",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_CongoDR_England",
+      "num": 907,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-01",
+      "venue": "",
+      "home": "England",
+      "away": "Congo DR",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Belgium_Senegal",
+      "num": 908,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-01",
+      "venue": "",
+      "home": "Belgium",
+      "away": "Senegal",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_BosniaandHerzegovina_UnitedStates",
+      "num": 909,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-02",
+      "venue": "",
+      "home": "United States",
+      "away": "Bosnia and Herzegovina",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Austria_Spain",
+      "num": 910,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-02",
+      "venue": "",
+      "home": "Spain",
+      "away": "Austria",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Croatia_Portugal",
+      "num": 911,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-02",
+      "venue": "",
+      "home": "Portugal",
+      "away": "Croatia",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Algeria_Switzerland",
+      "num": 912,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-03",
+      "venue": "",
+      "home": "Switzerland",
+      "away": "Algeria",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Australia_Egypt",
+      "num": 913,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-03",
+      "venue": "",
+      "home": "Australia",
+      "away": "Egypt",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Argentina_CapeVerde",
+      "num": 914,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-03",
+      "venue": "",
+      "home": "Argentina",
+      "away": "Cape Verde",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R32_Colombia_Ghana",
+      "num": 915,
+      "grp": null,
+      "round": "R32",
+      "md": null,
+      "date": "2026-07-04",
+      "venue": "",
+      "home": "Colombia",
+      "away": "Ghana",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R16_Canada_Morocco",
+      "num": 916,
+      "grp": null,
+      "round": "R16",
+      "md": null,
+      "date": "2026-07-04",
+      "venue": "",
+      "home": "Canada",
+      "away": "Morocco",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
     }
   ],
   "flags": {
