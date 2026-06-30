@@ -93,20 +93,37 @@ def record(api_home, api_away, hs, as_):
     res = (int(hs), int(as_)) if h == myH else (int(as_), int(hs))
     return num, res
 
+ROUND_MAP = {"LAST_32":"R32","LAST_16":"R16","QUARTER_FINALS":"QF",
+             "SEMI_FINALS":"SF","THIRD_PLACE":"BRONZE","FINAL":"FINAL"}
+
 def fetch_football_data(token):
     url = "https://api.football-data.org/v4/competitions/WC/matches"
     req = urllib.request.Request(url, headers={"X-Auth-Token": token})
     data = json.load(urllib.request.urlopen(req, timeout=30))
-    out, unmapped = {}, []
+    out, unmapped, ko = {}, [], []
     for m in data.get("matches", []):
-        if m.get("status") != "FINISHED": continue
+        stage = m.get("stage")
         ft = m.get("score", {}).get("fullTime", {})
-        if ft.get("home") is None: continue
+        fin = m.get("status") == "FINISHED"
+        if stage in ROUND_MAP:  # knockout
+            h = resolve((m.get("homeTeam") or {}).get("name"))
+            a = resolve((m.get("awayTeam") or {}).get("name"))
+            if not h or not a or h == a: continue
+            pkw = None
+            if m.get("score", {}).get("duration") == "PENALTY_SHOOTOUT":
+                w = m["score"].get("winner")
+                pkw = h if w=="HOME_TEAM" else a if w=="AWAY_TEAM" else None
+            ko.append({"round": ROUND_MAP[stage], "home": h, "away": a,
+                       "hs": ft.get("home"), "as": ft.get("away"),
+                       "status": "final" if fin else "scheduled", "pkWinner": pkw,
+                       "date": (m.get("utcDate") or "")[:10]})
+            continue
+        if not fin or ft.get("home") is None: continue
         r = record(m["homeTeam"]["name"], m["awayTeam"]["name"], ft["home"], ft["away"])
         if r: out[r[0]] = r[1]
         else: unmapped.append(f'{m["homeTeam"]["name"]} vs {m["awayTeam"]["name"]}')
     if unmapped: print("  ⚠ unmapped FINISHED matches:", " | ".join(unmapped))
-    return out
+    return out, ko
 
 def fetch_sportsdb():
     league = os.environ.get("DC_SPORTSDB_LEAGUE", "4429")
@@ -122,18 +139,19 @@ def fetch_sportsdb():
 
 def refresh_results():
     token = os.environ.get("DC_FOOTBALL_TOKEN")
-    results, src = {}, None
+    results, ko, src = {}, [], None
     try:
-        if token: results = fetch_football_data(token); src = "football-data.org"
+        if token: results, ko = fetch_football_data(token); src = "football-data.org"
         else:      results = fetch_sportsdb(); src = "TheSportsDB"
     except Exception as e:
         print("  ! live result fetch failed:", e)
-    if not results:
+    if not results and not ko:
         print("  results: none fetched; leaving results.json unchanged"); return
     payload = {"updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-               "source": src, "results": {str(k): list(v) for k, v in results.items()}}
+               "source": src, "results": {str(k): list(v) for k, v in results.items()},
+               "knockout": ko}
     json.dump(payload, open(os.path.join(DATA, "results.json"), "w"), indent=2)
-    print(f"  results: wrote {len(results)} from {src}")
+    print(f"  results: wrote {len(results)} group + {len(ko)} knockout from {src}")
 
 def selftest():
     samples=[("Mexico","South Africa",2,0),("Korea Republic","Czechia",2,1),
