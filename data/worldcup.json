@@ -1422,9 +1422,9 @@
       "venue": "",
       "home": "England",
       "away": "Congo DR",
-      "hs": 0,
+      "hs": 2,
       "as": 1,
-      "status": "scheduled",
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
