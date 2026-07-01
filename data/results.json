@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-01T19:07:33.183208+00:00",
+  "updated": "2026-07-01T21:44:38.641214+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -376,8 +376,8 @@
       "round": "R32",
       "home": "Belgium",
       "away": "Senegal",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 2,
       "status": "scheduled",
       "pkWinner": null,
       "date": "2026-07-01"

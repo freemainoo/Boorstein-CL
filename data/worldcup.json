@@ -1438,8 +1438,8 @@
       "venue": "",
       "home": "Belgium",
       "away": "Senegal",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 2,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null
