@@ -1422,8 +1422,8 @@
       "venue": "",
       "home": "England",
       "away": "Congo DR",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 1,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null

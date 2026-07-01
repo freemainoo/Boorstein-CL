@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-01T13:39:47.248219+00:00",
+  "updated": "2026-07-01T16:37:09.680960+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -366,8 +366,8 @@
       "round": "R32",
       "home": "England",
       "away": "Congo DR",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 1,
       "status": "scheduled",
       "pkWinner": null,
       "date": "2026-07-01"
