@@ -1438,9 +1438,9 @@
       "venue": "",
       "home": "Belgium",
       "away": "Senegal",
-      "hs": 0,
+      "hs": 3,
       "as": 2,
-      "status": "scheduled",
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
