@@ -1470,9 +1470,9 @@
       "venue": "",
       "home": "Spain",
       "away": "Austria",
-      "hs": 2,
+      "hs": 3,
       "as": 0,
-      "status": "scheduled",
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
