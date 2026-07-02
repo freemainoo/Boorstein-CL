@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-01T23:39:01.279857+00:00",
+  "updated": "2026-07-02T04:18:00.948845+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -386,9 +386,9 @@
       "round": "R32",
       "home": "United States",
       "away": "Bosnia and Herzegovina",
-      "hs": null,
-      "as": null,
-      "status": "scheduled",
+      "hs": 2,
+      "as": 0,
+      "status": "final",
       "pkWinner": null,
       "date": "2026-07-02"
     },

@@ -1454,9 +1454,9 @@
       "venue": "",
       "home": "United States",
       "away": "Bosnia and Herzegovina",
-      "hs": null,
-      "as": null,
-      "status": "scheduled",
+      "hs": 2,
+      "as": 0,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
