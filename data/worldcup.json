@@ -1470,8 +1470,8 @@
       "venue": "",
       "home": "Spain",
       "away": "Austria",
-      "hs": null,
-      "as": null,
+      "hs": 2,
+      "as": 0,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null

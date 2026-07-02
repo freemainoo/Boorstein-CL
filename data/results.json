@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-02T18:44:46.925860+00:00",
+  "updated": "2026-07-02T20:36:18.475184+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -396,8 +396,8 @@
       "round": "R32",
       "home": "Spain",
       "away": "Austria",
-      "hs": null,
-      "as": null,
+      "hs": 2,
+      "as": 0,
       "status": "scheduled",
       "pkWinner": null,
       "date": "2026-07-02"
