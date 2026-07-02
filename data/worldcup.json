@@ -1603,6 +1603,38 @@
       "status": "scheduled",
       "pk": false,
       "pkWinner": null
+    },
+    {
+      "id": "k_R16_England_Mexico",
+      "num": 919,
+      "grp": null,
+      "round": "R16",
+      "md": null,
+      "date": "2026-07-06",
+      "venue": "",
+      "home": "Mexico",
+      "away": "England",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_R16_Belgium_UnitedStates",
+      "num": 920,
+      "grp": null,
+      "round": "R16",
+      "md": null,
+      "date": "2026-07-07",
+      "venue": "",
+      "home": "United States",
+      "away": "Belgium",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
     }
   ],
   "flags": {

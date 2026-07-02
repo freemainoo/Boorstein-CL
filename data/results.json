@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-02T04:18:00.948845+00:00",
+  "updated": "2026-07-02T08:22:10.133010+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -481,6 +481,26 @@
       "status": "scheduled",
       "pkWinner": null,
       "date": "2026-07-05"
+    },
+    {
+      "round": "R16",
+      "home": "Mexico",
+      "away": "England",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-06"
+    },
+    {
+      "round": "R16",
+      "home": "United States",
+      "away": "Belgium",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pkWinner": null,
+      "date": "2026-07-07"
     }
   ]
 }
