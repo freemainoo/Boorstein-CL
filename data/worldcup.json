@@ -1486,9 +1486,9 @@
       "venue": "",
       "home": "Portugal",
       "away": "Croatia",
-      "hs": 0,
-      "as": 0,
-      "status": "scheduled",
+      "hs": 2,
+      "as": 1,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
@@ -1502,8 +1502,8 @@
       "venue": "",
       "home": "Switzerland",
       "away": "Algeria",
-      "hs": null,
-      "as": null,
+      "hs": 2,
+      "as": 0,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null
