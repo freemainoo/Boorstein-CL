@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-03T18:22:45.755616+00:00",
+  "updated": "2026-07-03T20:21:06.112672+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -426,7 +426,7 @@
       "round": "R32",
       "home": "Australia",
       "away": "Egypt",
-      "hs": 0,
+      "hs": 1,
       "as": 1,
       "status": "scheduled",
       "pkWinner": null,
