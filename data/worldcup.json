@@ -1518,9 +1518,9 @@
       "venue": "",
       "home": "Australia",
       "away": "Egypt",
-      "hs": 1,
-      "as": 1,
-      "status": "scheduled",
+      "hs": 3,
+      "as": 5,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
@@ -1534,8 +1534,8 @@
       "venue": "",
       "home": "Argentina",
       "away": "Cape Verde",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 0,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null
