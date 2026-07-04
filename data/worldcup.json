@@ -1567,8 +1567,8 @@
       "home": "Canada",
       "away": "Morocco",
       "hs": 0,
-      "as": 0,
-      "status": "scheduled",
+      "as": 3,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
