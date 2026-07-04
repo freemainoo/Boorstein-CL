@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-04T16:13:45.435967+00:00",
+  "updated": "2026-07-04T18:12:08.182285+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -456,8 +456,8 @@
       "round": "R16",
       "home": "Canada",
       "away": "Morocco",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 0,
       "status": "scheduled",
       "pkWinner": null,
       "date": "2026-07-04"

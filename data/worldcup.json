@@ -1566,8 +1566,8 @@
       "venue": "",
       "home": "Canada",
       "away": "Morocco",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 0,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null
