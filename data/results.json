@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-04T20:15:38.325413+00:00",
+  "updated": "2026-07-04T22:08:26.519244+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -466,8 +466,8 @@
       "round": "R16",
       "home": "Paraguay",
       "away": "France",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 0,
       "status": "scheduled",
       "pkWinner": null,
       "date": "2026-07-04"
