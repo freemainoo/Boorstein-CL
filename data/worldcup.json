@@ -1534,8 +1534,8 @@
       "venue": "",
       "home": "Argentina",
       "away": "Cape Verde",
-      "hs": 0,
-      "as": 0,
+      "hs": 2,
+      "as": 1,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null
