@@ -1598,9 +1598,9 @@
       "venue": "",
       "home": "Brazil",
       "away": "Norway",
-      "hs": 0,
-      "as": 0,
-      "status": "scheduled",
+      "hs": 1,
+      "as": 2,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
