@@ -1683,6 +1683,22 @@
       "status": "scheduled",
       "pk": false,
       "pkWinner": null
+    },
+    {
+      "id": "k_QF_France_Morocco",
+      "num": 924,
+      "grp": null,
+      "round": "QF",
+      "md": null,
+      "date": "2026-07-09",
+      "venue": "",
+      "home": "France",
+      "away": "Morocco",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
     }
   ],
   "flags": {
