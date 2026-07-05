@@ -1583,8 +1583,8 @@
       "home": "Paraguay",
       "away": "France",
       "hs": 0,
-      "as": 0,
-      "status": "scheduled",
+      "as": 1,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
