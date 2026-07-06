@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-06T17:13:04.217899+00:00",
+  "updated": "2026-07-06T20:10:54.042945+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -496,8 +496,8 @@
       "round": "R16",
       "home": "Portugal",
       "away": "Spain",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 0,
       "status": "scheduled",
       "pkWinner": null,
       "date": "2026-07-06"
