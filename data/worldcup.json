@@ -1614,9 +1614,9 @@
       "venue": "",
       "home": "Mexico",
       "away": "England",
-      "hs": null,
-      "as": null,
-      "status": "scheduled",
+      "hs": 2,
+      "as": 3,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
