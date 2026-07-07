@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-07T20:56:15.237456+00:00",
+  "updated": "2026-07-07T22:20:27.574223+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -528,7 +528,7 @@
       "away": "Colombia",
       "hs": 0,
       "as": 0,
-      "status": "scheduled",
+      "status": "final",
       "pkWinner": null,
       "date": "2026-07-07"
     },
