@@ -1701,8 +1701,24 @@
       "pkWinner": null
     },
     {
-      "id": "k_QF_England_Norway",
+      "id": "k_QF_Belgium_Spain",
       "num": 925,
+      "grp": null,
+      "round": "QF",
+      "md": null,
+      "date": "2026-07-10",
+      "venue": "",
+      "home": "Spain",
+      "away": "Belgium",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_QF_England_Norway",
+      "num": 926,
       "grp": null,
       "round": "QF",
       "md": null,
