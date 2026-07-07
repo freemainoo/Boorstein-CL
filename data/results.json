@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-07T00:18:07.514818+00:00",
+  "updated": "2026-07-07T05:04:04.097881+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -506,9 +506,9 @@
       "round": "R16",
       "home": "United States",
       "away": "Belgium",
-      "hs": 0,
-      "as": 1,
-      "status": "scheduled",
+      "hs": 1,
+      "as": 4,
+      "status": "final",
       "pkWinner": null,
       "date": "2026-07-07"
     },

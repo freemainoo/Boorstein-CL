@@ -1646,9 +1646,9 @@
       "venue": "",
       "home": "United States",
       "away": "Belgium",
-      "hs": 0,
-      "as": 1,
-      "status": "scheduled",
+      "hs": 1,
+      "as": 4,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
