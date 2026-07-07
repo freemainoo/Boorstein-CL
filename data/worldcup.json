@@ -1662,9 +1662,9 @@
       "venue": "",
       "home": "Argentina",
       "away": "Egypt",
-      "hs": null,
-      "as": null,
-      "status": "scheduled",
+      "hs": 3,
+      "as": 2,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
