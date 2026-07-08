@@ -247,6 +247,16 @@ def main():
     results, knockout = load_overrides()
     matches = build_matches(results, knockout)
     entrants = read_entrants()
+    title_race = None
+    try:
+        import simulate
+        title_race = simulate.compute(matches, entrants, my_entry=ME)
+        tr = title_race
+        print(f"  title race: {tr['stage']} · {tr['completions']:,} completions · "
+              f"{tr['aliveForFirst']} alive for 1st · fav {tr['fav']}")
+    except Exception as e:
+        import traceback; traceback.print_exc()
+        print("  ! title-race compute failed (tab will be hidden):", e)
     payload = {
         "sheet": SHEET, "me": ME,
         "contestGroups": {str(k):v for k,v in CONTEST_GROUPS.items()},
@@ -261,6 +271,7 @@ def main():
         "knockout": {},          # team -> furthest round key (R16/QF/SF/F/W) once knockouts begin
         "thirdsAdvanced": [],    # 3rd-place teams that qualify (set after group stage)
         "eliminated": [],        # teams knocked out (optional, for "alive" count)
+        "titleRace": title_race, # None until knockouts begin; drives the Title Race tab
         "builtAt": datetime.date.today().isoformat(),
     }
     # write readable data files (for the git pipeline / inspection)

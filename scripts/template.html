@@ -133,6 +133,55 @@
   .koresult select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:6px;font-size:11px;padding:2px}
   .ko-strip .kob b{display:block;font-size:12.5px}
   .ko-strip .kob span{color:var(--muted);font-size:11px}
+  /* ---- Title Race tab ---- */
+  h3.trh{font-size:13.5px;margin:0 0 12px;color:var(--txt);font-weight:700}
+  .tr-toggle{margin-left:auto;display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .tr-mode{background:var(--panel);color:var(--muted);border:none;padding:5px 11px;font-size:12px;cursor:pointer;font-weight:600}
+  .tr-mode.active{background:var(--accent2);color:#04121f}
+  .trrow{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid var(--line)}
+  .trrow:last-child{border-bottom:none}
+  .trrow .trk{width:20px;color:var(--muted);font-size:12px;text-align:right;flex:0 0 20px}
+  .trrow .trn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;font-size:13px}
+  .trrow.dead .trn{color:var(--muted);font-weight:500}
+  .trrow.me .trn{color:var(--accent)}
+  .trrow .trtrack{flex:0 0 120px;background:var(--panel2);border-radius:6px;height:16px;overflow:hidden;position:relative}
+  .trrow .trfill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent))}
+  .trrow.me .trfill{background:linear-gradient(90deg,#16a34a,var(--accent))}
+  .trrow .trpct{flex:0 0 46px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:12.5px}
+  .trrow .trpts{flex:0 0 40px;text-align:right;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .trrow .trtag{flex:0 0 auto;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+  .trg{padding:8px 0;border-bottom:1px solid var(--line)}.trg:last-child{border-bottom:none}
+  .trg-h{display:flex;align-items:center;font-size:12.5px;font-weight:600;margin-bottom:5px}
+  .trg-h .sw{margin-left:auto;font-size:11px;color:var(--warn);font-weight:700}
+  .trg-bar{display:flex;height:8px;border-radius:5px;overflow:hidden;background:var(--panel2)}
+  .trg-bar i{display:block;height:100%}
+  .trg-sub{font-size:11px;color:var(--muted);margin-top:3px}
+  .tr-selrow{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+  .tr-cbox{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+  .tr-block h4{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin:0 0 7px}
+  .root{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 0}
+  .root .rt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .root .rd{flex:0 0 auto;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
+  .root .own{color:var(--accent);font-weight:700}
+  .cond{font-size:12.5px;padding:3px 0;color:var(--txt)}
+  .cond b{color:var(--accent2)}
+  .tree{font-size:12.5px;line-height:1.5;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .tree .tn{padding-left:0}
+  .tree .br{position:relative;padding:2px 0 2px 16px;border-left:1px solid var(--line);margin-left:6px}
+  .tree .br:before{content:"";position:absolute;left:0;top:14px;width:12px;height:1px;background:var(--line)}
+  .tree .own{color:var(--accent);font-weight:700}
+  .tree .dead{color:var(--danger)}
+  .tree .clinch{color:var(--gold);font-weight:700}
+  .tree .lp{color:var(--muted)}
+  .watch{display:flex;gap:8px;flex-wrap:wrap}
+  .wc{flex:1 1 220px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+  .wc-h{font-size:12px;font-weight:700;margin-bottom:6px}
+  .wc-o{font-size:11.5px;padding:3px 0;border-top:1px dashed var(--line)}
+  .wc-o .ww{font-weight:600}
+  .wc-o .elim{color:var(--warn)}
+  .wc-o .none{color:var(--muted)}
+  .wc-o .cl{color:var(--gold);font-weight:700}
+  @media(max-width:760px){#trTop{grid-template-columns:1fr!important}.tr-cbox{grid-template-columns:1fr}}
   @media(max-width:640px){.kpis{width:100%;margin-left:0}.barrow .lbl{width:104px}}
 </style>
 </head>
@@ -160,6 +209,7 @@
     <div class="tab" data-v="teams">My 12 Teams</div>
     <div class="tab" data-v="bracket">Bracket &amp; Paths</div>
     <div class="tab" data-v="board">Leaderboard</div>
+    <div class="tab" data-v="titlerace">🏆 Title Race</div>
     <div class="tab" data-v="field">Field Analysis</div>
     <div class="tab" data-v="perfect">Perfect Picks</div>
     <div class="tab" data-v="results">Enter Results</div>
@@ -312,6 +362,39 @@
     <h2 class="sec">Enter / correct match results</h2>
     <div class="note">Live scores auto-load from the sheet's totals, but match-by-match results are entered here so the bracket and per-team breakdown stay exact. Edits save in your browser. Pre-filled with results through June&nbsp;12.</div>
     <div id="resultsList"></div>
+  </section>
+
+  <!-- TITLE RACE -->
+  <section class="view" id="v-titlerace">
+    <h2 class="sec">Title Race <span class="pill" id="trStage"></span>
+      <span class="tr-toggle" id="trToggle">
+        <button class="tr-mode active" data-mode="even">Even odds</button><button class="tr-mode" data-mode="model">Elo model</button>
+      </span>
+    </h2>
+    <div class="note" id="trIntro"></div>
+    <div class="grid" style="grid-template-columns:1.5fr 1fr;gap:16px;align-items:start" id="trTop">
+      <div class="panel"><h3 class="trh">Who can still win <span class="pill" id="trAliveN"></span></h3>
+        <div id="trBoard"></div>
+        <div class="muted" style="font-size:11.5px;margin-top:8px" id="trBoardNote"></div>
+      </div>
+      <div class="panel"><h3 class="trh">Most decisive games left</h3>
+        <div id="trGames"></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px"><h3 class="trh">Contender explorer</h3>
+      <div class="tr-selrow">
+        <select class="sel" id="trPick"></select>
+        <span class="muted" id="trPickStat" style="font-size:12.5px"></span>
+      </div>
+      <div id="trContender"></div>
+    </div>
+
+    <div class="panel" style="margin-top:16px"><h3 class="trh">Clinch / elimination watch <span class="pill">next results</span></h3>
+      <div class="muted" style="font-size:12.5px;margin-bottom:8px">What each upcoming result does to the title race. No one can clinch this early — the story is who gets knocked out of contention for 1st.</div>
+      <div id="trWatch"></div>
+    </div>
+    <div class="note" id="trMethod" style="margin-top:16px"></div>
   </section>
 
   <div class="foot">
@@ -899,7 +982,115 @@ function renderPerfectPicks(){
       <div class="chip-pct">${gr.best.total} pts</div>
       ${gr.hit?'':`<div class="chip-mine">you: ${flag(gr.mine)} ${gr.mine} (${mineScore?mineScore.total:0})</div>`}</div>`;}).join('');
 }
-function renderAll(){ invalidateTables(); renderHeader(); renderOverview(); renderTeams(); renderBracket(); renderBoard(); renderField(); renderPerfectPicks(); renderResults(); }
+/* ====================== TITLE RACE ====================== */
+let TR_MODE='even';
+const trPct=p=>(p*100).toFixed(1);
+const trPct0=p=>Math.round(p*100);
+function trNode(node){
+  const hdr=`<div class="lp">${flag(node.a)} ${node.a} vs ${node.b} ${flag(node.b)}?</div>`;
+  const brs=node.branches.map(br=>{
+    const own=br.own?'own':'';
+    let tail;
+    if(br.dead) tail='→ <span class="dead">out of 1st</span>';
+    else if(br.clinch) tail='→ <span class="clinch">clinched 🏆</span>';
+    else if(br.child) tail='→';
+    else tail=`→ <b>${trPct0(br.pct)}%</b>`;
+    return `<div class="br"><span class="${own}">${flag(br.team)} ${br.team}${br.own?'*':''}</span> ${tail}${br.child?trNode(br.child):''}</div>`;
+  }).join('');
+  return hdr+brs;
+}
+function trTree(node){
+  if(!node) return '<div class="tree lp">No single must-win game — you have many mixed paths from here.</div>';
+  return `<div class="tree">${trNode(node)}</div>`;
+}
+function renderTRBoard(){
+  const TR=DATA.titleRace; if(!TR) return;
+  const rows=TR.board.slice().sort((a,b)=> (b[TR_MODE]-a[TR_MODE]) || (b.cur-a.cur));
+  const mx=Math.max(0.01,...rows.map(r=>r[TR_MODE]));
+  document.getElementById('trBoard').innerHTML = rows.slice(0,14).map(r=>{
+    const p=r[TR_MODE], dead=!r.alive, me=r.name===TR.myEntry;
+    const tag = dead?'<span class="trtag">out of 1st</span>':(r.top2>0?`<span class="trtag">top-2 ${trPct0(r.top2)}%</span>`:'');
+    return `<div class="trrow ${dead?'dead':''} ${me?'me':''}">
+      <span class="trk">${r.rank}</span>
+      <span class="trn">${r.name}${me?' ★':''}</span>
+      <span class="trpts">${r.cur}</span>
+      <span class="trtrack"><span class="trfill" style="width:${dead?0:Math.round(p/mx*100)}%"></span></span>
+      <span class="trpct">${dead?'—':trPct(p)+'%'}</span>
+      ${tag}
+    </div>`;
+  }).join('');
+  document.querySelectorAll('#trToggle .tr-mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===TR_MODE));
+}
+function renderContender(name){
+  const TR=DATA.titleRace; const r=TR.board.find(x=>x.name===name); if(!r) return;
+  const stat=document.getElementById('trPickStat');
+  stat.innerHTML = r.alive
+    ? `even <b>${trPct(r.even)}%</b> · model <b>${trPct(r.model)}%</b> · rank ${r.rank} · ${r.cur} pts · top-2 ${trPct0(r.top2)}% · finishes above ${TR.leader} in <b>${trPct0(r.beat)}%</b>`
+    : `<span style="color:var(--warn)">Eliminated from 1st</span> · rank ${r.rank} · ${r.cur} pts · still top-2 in ${trPct0(r.top2)}%`;
+  if(!r.alive || !r.rooting){ document.getElementById('trContender').innerHTML=
+    `<div class="note">This entry can no longer finish 1st in any remaining bracket outcome. Ceiling ${r.ceil}, floor ${r.floor}.</div>`; return; }
+  const root=r.rooting.filter(x=>x.delta>0.004).map(x=>
+    `<div class="root"><span class="rt ${x.own?'own':''}">${flag(x.team)} ${x.team}${x.own?' ★':''} <span class="lp">over ${x.vs}</span></span><span class="rd">+${trPct0(x.delta)}%</span></div>`
+  ).join('') || '<div class="lp">Indifferent — no game moves your odds much.</div>';
+  const need = r.necessary.length
+    ? r.necessary.map(c=>`<div class="cond">✓ <b>${c.team}</b> must beat ${c.vs}</div>`).join('')
+    : '<div class="cond lp">No single must-win — multiple paths keep you alive.</div>';
+  document.getElementById('trContender').innerHTML = `
+    <div class="tr-cbox">
+      <div class="tr-block"><h4>Root for (odds gained if they advance)</h4>${root}</div>
+      <div class="tr-block"><h4>Must happen to finish 1st</h4>${need}</div>
+    </div>
+    <div class="tr-block" style="margin-top:14px"><h4>Your path to 1st (★ = your pick · % = win odds on that branch)</h4>${trTree(r.tree)}</div>`;
+}
+function renderTitleRace(){
+  const TR=DATA.titleRace;
+  const tab=document.querySelector('.tab[data-v="titlerace"]');
+  if(!TR){ if(tab) tab.style.display='none'; return; }
+  if(tab) tab.style.display='';
+  document.getElementById('trStage').textContent=TR.stage;
+  document.getElementById('trAliveN').textContent=`${TR.aliveForFirst} of ${TR.entrantsTotal} alive`;
+  document.getElementById('trIntro').innerHTML =
+    `<b>${TR.undecided}</b> knockout matches remain unplayed — <b>${TR.completions.toLocaleString()}</b> possible ways the bracket can finish. `+
+    `We score every one exactly. <b>${TR.aliveForFirst}</b> entrants can still finish 1st. `+
+    `<b>${TR.leader}</b> leads on points; the strength model favours <b>${TR.fav}</b>.`;
+  document.getElementById('trBoardNote').innerHTML =
+    `<b>Even odds</b> = every remaining result a coin-flip. <b>Elo model</b> = weighted by world-football ratings. Bar + % reflect the selected mode.`;
+  renderTRBoard();
+  // decisive games
+  document.getElementById('trGames').innerHTML = TR.games.map(g=>{
+    const tot=Math.max(0.001,g.favIfA+g.favIfB);
+    return `<div class="trg">
+      <div class="trg-h">${flag(g.a)} ${g.a} vs ${g.b} ${flag(g.b)} <span class="sw">swing ${trPct0(g.swing)}%</span></div>
+      <div class="trg-bar"><i style="width:${Math.round(g.favIfA/tot*100)}%;background:var(--accent2)"></i><i style="width:${Math.round(g.favIfB/tot*100)}%;background:var(--accent)"></i></div>
+      <div class="trg-sub">${g.fav} to win: <b>${trPct0(g.favIfA)}%</b> if ${g.a} · <b>${trPct0(g.favIfB)}%</b> if ${g.b}</div>
+    </div>`;
+  }).join('');
+  // contender selector
+  const sel=document.getElementById('trPick');
+  const opts=TR.board.filter(r=>r.rooting || r.name===TR.myEntry);
+  sel.innerHTML=opts.map(r=>`<option value="${r.name}">${r.name}${r.name===TR.myEntry?' ★ (you)':''} — ${trPct(r.even)}% win</option>`).join('');
+  const def = TR.myEntry && opts.some(o=>o.name===TR.myEntry) ? TR.myEntry : (opts[0]&&opts[0].name);
+  sel.value=def; renderContender(def);
+  sel.onchange=()=>renderContender(sel.value);
+  // clinch / elimination watch
+  document.getElementById('trWatch').innerHTML = `<div class="watch">`+TR.watch.map(w=>{
+    const outs=w.outcomes.map(o=>{
+      const parts=[];
+      if(o.clinch.length) parts.push(`<span class="cl">clinches: ${o.clinch.join(', ')}</span>`);
+      if(o.eliminated.length) parts.push(`<span class="elim">out: ${o.eliminated.join(', ')}</span>`);
+      if(!parts.length) parts.push('<span class="none">no eliminations</span>');
+      return `<div class="wc-o"><span class="ww">${flag(o.winner)} ${o.winner} wins</span> — ${parts.join(' · ')}</div>`;
+    }).join('');
+    return `<div class="wc"><div class="wc-h">${flag(w.a)} ${w.a} vs ${w.b} ${flag(w.b)}</div>${outs}</div>`;
+  }).join('')+`</div>`;
+  document.getElementById('trMethod').innerHTML =
+    `<b>Method.</b> Exact enumeration of all ${TR.completions.toLocaleString()} remaining bracket completions (no sampling). `+
+    `Each entrant's score is recomputed under the pool's rules in every completion; win odds are the share of completions they finish 1st. `+
+    `The Elo model weights each completion by world-football ratings (with a small host edge for USA/Mexico); even odds treats every completion as equally likely. Updates automatically as results come in.`;
+  document.querySelectorAll('#trToggle .tr-mode').forEach(b=> b.onclick=()=>{ TR_MODE=b.dataset.mode; renderTRBoard(); });
+}
+
+function renderAll(){ invalidateTables(); renderHeader(); renderOverview(); renderTeams(); renderBracket(); renderBoard(); renderTitleRace(); renderField(); renderPerfectPicks(); renderResults(); }
 
 /* ====================== NAV ====================== */
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
