@@ -1681,8 +1681,8 @@
       "hs": 4,
       "as": 3,
       "status": "final",
-      "pk": false,
-      "pkWinner": null
+      "pk": true,
+      "pkWinner": "Switzerland"
     },
     {
       "id": "k_QF_France_Morocco",
@@ -1726,6 +1726,22 @@
       "venue": "",
       "home": "Norway",
       "away": "England",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_QF_Argentina_Switzerland",
+      "num": 927,
+      "grp": null,
+      "round": "QF",
+      "md": null,
+      "date": "2026-07-12",
+      "venue": "",
+      "home": "Argentina",
+      "away": "Switzerland",
       "hs": null,
       "as": null,
       "status": "scheduled",
