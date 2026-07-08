@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-07T22:20:27.574223+00:00",
+  "updated": "2026-07-08T00:09:20.697441+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -526,8 +526,8 @@
       "round": "R16",
       "home": "Switzerland",
       "away": "Colombia",
-      "hs": 0,
-      "as": 0,
+      "hs": 4,
+      "as": 3,
       "status": "final",
       "pkWinner": null,
       "date": "2026-07-07"

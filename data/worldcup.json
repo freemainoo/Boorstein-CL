@@ -1678,8 +1678,8 @@
       "venue": "",
       "home": "Switzerland",
       "away": "Colombia",
-      "hs": 0,
-      "as": 0,
+      "hs": 4,
+      "as": 3,
       "status": "final",
       "pk": false,
       "pkWinner": null
