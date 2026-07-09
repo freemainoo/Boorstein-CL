@@ -1694,8 +1694,8 @@
       "venue": "",
       "home": "France",
       "away": "Morocco",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 0,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null
