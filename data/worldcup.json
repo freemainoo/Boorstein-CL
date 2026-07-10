@@ -1710,9 +1710,9 @@
       "venue": "",
       "home": "Spain",
       "away": "Belgium",
-      "hs": 1,
+      "hs": 2,
       "as": 1,
-      "status": "scheduled",
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
