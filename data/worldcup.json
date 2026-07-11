@@ -1747,6 +1747,22 @@
       "status": "scheduled",
       "pk": false,
       "pkWinner": null
+    },
+    {
+      "id": "k_SF_France_Spain",
+      "num": 928,
+      "grp": null,
+      "round": "SF",
+      "md": null,
+      "date": "2026-07-14",
+      "venue": "",
+      "home": "France",
+      "away": "Spain",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
     }
   ],
   "flags": {
