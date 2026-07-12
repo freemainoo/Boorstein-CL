@@ -1726,9 +1726,9 @@
       "venue": "",
       "home": "Norway",
       "away": "England",
-      "hs": 2,
-      "as": 1,
-      "status": "scheduled",
+      "hs": 1,
+      "as": 2,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
