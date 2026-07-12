@@ -1742,9 +1742,9 @@
       "venue": "",
       "home": "Argentina",
       "away": "Switzerland",
-      "hs": null,
-      "as": null,
-      "status": "scheduled",
+      "hs": 3,
+      "as": 1,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },

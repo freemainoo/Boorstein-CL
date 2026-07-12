@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-12T00:08:30.045265+00:00",
+  "updated": "2026-07-12T04:34:12.237762+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -566,9 +566,9 @@
       "round": "QF",
       "home": "Argentina",
       "away": "Switzerland",
-      "hs": null,
-      "as": null,
-      "status": "scheduled",
+      "hs": 3,
+      "as": 1,
+      "status": "final",
       "pkWinner": null,
       "date": "2026-07-12"
     },
