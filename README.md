@@ -57,10 +57,10 @@ worldcup-tracker/
 
 Per team: **1**/goal · **1**/group-stage point (3 win / 1 draw) ·
 **+8** win group / **+4** 2nd / **+2** advance as a 3rd-place team ·
-knockout milestones **+16** R16 · **+24** QF · **+32** SF · **+48** final · **+64** champion.
-**Teams in ability-groups 9–12 score double.**
+knockout milestones (awarded **cumulatively**) **+16** R16 · **+24** QF · **+32** SF · **+48** final · **+64** champion — e.g. a semifinalist has earned 16+24+32 = 72.
+**Teams in ability-groups 9–12 double their group points, finish bonus, and advancement bonus — goals are counted once (not doubled).**
 
-> Verified: the engine reproduces the organizer's official `Score` column for **all 231 entrants** exactly.
+> Verified against the organizer's post-quarterfinal sheet: the engine reproduces the official **Points** column (group + finish + cumulative advancement, ×2 for groups 9–12) **exactly** for every entrant. Goals are counted once and track the sheet within a few (knockout extra-time/penalty goal accounting in the data feed).
 
 ### Updating match results / knockouts
 - Quick edits: use the **Enter Results** tab in the dashboard (saved in your browser).
@@ -68,7 +68,8 @@ knockout milestones **+16** R16 · **+24** QF · **+32** SF · **+48** final · 
 - Once the group stage ends, set `thirdsAdvanced` (the 8 qualifying 3rd-place teams) and,
   as the knockouts progress, the `knockout` map (`team → R16/QF/SF/F/W`) in `build.py`.
 
-### One scoring assumption
-The knockout bonuses (16/24/32/48/64) are treated as **"furthest round reached"** (a team that
-reaches the final gets 48, not 16+24+32+48). If the organizer scores them cumulatively instead,
-change `ADV` handling in `scripts/template.html`. This can't be confirmed until the knockouts begin.
+### Scoring confirmed (knockouts)
+The knockout bonuses (16/24/32/48/64) are awarded **cumulatively** — a team that reaches the final
+has earned 16+24+32+48 = 120. Confirmed against the organizer's post-QF sheet (matches the official
+Points column exactly). `advFor` in `scripts/template.html` and `adv_for` in `scripts/simulate.py`
+both implement this.

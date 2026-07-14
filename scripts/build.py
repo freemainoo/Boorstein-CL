@@ -15,7 +15,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 DATA = os.path.join(ROOT, "data")
 
-SHEET = {"id": "1CAtVLI4V07gAlfaTcKehua-6HmIg-hDCHNUnXWhh5d4", "gid": "1365959132"}
+SHEET = {"id": "1CAtVLI4V07gAlfaTcKehua-6HmIg-hDCHNUnXWhh5d4", "gid": "1567462692"}  # live picks+Score tab (1365959132 froze in the group stage)
 ME = "Debiche"
 
 # ---- 12 ability groups (the pool's custom tiers). Groups 9-12 score DOUBLE. ----

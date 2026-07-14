@@ -147,10 +147,26 @@ def refresh_results():
         print("  ! live result fetch failed:", e)
     if not results and not ko:
         print("  results: none fetched; leaving results.json unchanged"); return
+    # ---- safety guard: never let a flaky/empty source overwrite good data ----
+    path = os.path.join(DATA, "results.json")
+    new_g = len(results); new_ko = sum(1 for k in ko if k.get("status") == "final")
+    old_g = old_ko = 0
+    try:
+        old = json.load(open(path))
+        old_g = len(old.get("results", {}))
+        old_ko = sum(1 for k in old.get("knockout", []) if k.get("status") == "final")
+    except Exception:
+        pass
+    if (old_g + old_ko) and (new_g + new_ko) < 0.7 * (old_g + old_ko):
+        print(f"  ! guard: pull too small ({new_g}g+{new_ko}ko vs existing {old_g}g+{old_ko}ko) "
+              f"from {src} — keeping existing results.json"); return
+    if old_ko > 0 and new_ko == 0:
+        print(f"  ! guard: existing has {old_ko} knockout results but pull has 0 "
+              f"from {src} — keeping existing results.json"); return
     payload = {"updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
                "source": src, "results": {str(k): list(v) for k, v in results.items()},
                "knockout": ko}
-    json.dump(payload, open(os.path.join(DATA, "results.json"), "w"), indent=2)
+    json.dump(payload, open(path, "w"), indent=2)
     print(f"  results: wrote {len(results)} group + {len(ko)} knockout from {src}")
 
 def selftest():

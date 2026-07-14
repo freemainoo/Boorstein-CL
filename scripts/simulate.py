@@ -107,12 +107,15 @@ def ko_reach(team, matches):
     return best,inR32,wonF
 
 def adv_for(best,wonF):
-    if wonF: return ADV["W"]
-    if best>=KO_RANK["FINAL"]: return ADV["F"]
-    if best>=KO_RANK["SF"]: return ADV["SF"]
-    if best>=KO_RANK["QF"]: return ADV["QF"]
-    if best>=KO_RANK["R16"]: return ADV["R16"]
-    return 0
+    # cumulative: a team collects every milestone up to the round it reached
+    b = KO_RANK["FINAL"] if wonF else best
+    s = 0
+    if b>=KO_RANK["R16"]:   s+=ADV["R16"]   # 16
+    if b>=KO_RANK["QF"]:    s+=ADV["QF"]    # +24
+    if b>=KO_RANK["SF"]:    s+=ADV["SF"]    # +32
+    if b>=KO_RANK["FINAL"]: s+=ADV["F"]     # +48
+    if wonF:                s+=ADV["W"]     # +64 champion
+    return s
 
 def team_fixed_adv(team, matches):
     g=team_group[team]; mult=2 if g in DBL else 1; goals=gpts=finish=0
@@ -130,7 +133,7 @@ def team_fixed_adv(team, matches):
         if pos==1: finish=FINISH[1]
         elif pos==2: finish=FINISH[2]
         elif pos==3: finish=FINISH[3] if inR32 else 0
-    return goals+gpts+finish, adv_for(best,wonF), mult
+    return gpts+finish, adv_for(best,wonF), mult, goals   # goals returned separately (counted once, not doubled)
 
 ROUND_NAME={"R16":"Round of 16","QF":"Quarter-finals","SF":"Semi-finals","FINAL":"Final"}
 
@@ -139,7 +142,7 @@ def compute(matches, entrants, my_entry="Debiche", eg_goals=1.3, board_n=18, det
     B,W,R=resolve_bracket(matches)
     tinfo={t:team_fixed_adv(t,matches) for t in team_group}
     entrants=[dict(e) for e in entrants]
-    for e in entrants: e["cur"]=sum((tinfo[t][0]+tinfo[t][1])*tinfo[t][2] for t in e["picks"])
+    for e in entrants: e["cur"]=sum((tinfo[t][0]+tinfo[t][1])*tinfo[t][2] + tinfo[t][3] for t in e["picks"])  # (gpts+finish+adv)*mult + goals
     entrants.sort(key=lambda e:(-e["cur"],-e.get("goalsPred",0)))
     for i,e in enumerate(entrants): e["rank"]=i+1
     ename={e["name"]:e for e in entrants}
@@ -196,7 +199,7 @@ def compute(matches, entrants, my_entry="Debiche", eg_goals=1.3, board_n=18, det
                 adv[t]=adv_for(best,wonF); fut[t]=games
             b1=(-1,None);b2=(-1,None); vals={}
             for e in entrants:
-                val=e["cur"]+sum((adv[t]-ca+eg*fut[t])*mu for (t,mu,ca) in e["ap"]); vals[e["name"]]=val
+                val=e["cur"]+sum((adv[t]-ca)*mu + eg*fut[t] for (t,mu,ca) in e["ap"]); vals[e["name"]]=val   # advancement doubles; future goals count once
                 if val>ceiling.get(e["name"],-1): ceiling[e["name"]]=val
                 if val<floor.get(e["name"],10**9): floor[e["name"]]=val
                 if val>b1[0]: b2=b1;b1=(val,e["name"])

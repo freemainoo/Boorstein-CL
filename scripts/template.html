@@ -245,7 +245,7 @@
   <!-- MY TEAMS -->
   <section class="view" id="v-teams">
     <h2 class="sec">Your 12 picks — live breakdown</h2>
-    <p class="muted" style="margin-top:-4px;font-size:13px">Points = goals + group points + finish bonus + advancement bonus, then ×2 for ability-groups 9–12. Bonuses apply once a stage completes.</p>
+    <p class="muted" style="margin-top:-4px;font-size:13px">Points = goals (counted once) + (group points + finish bonus + advancement bonus) ×2 for ability-groups 9–12. Bonuses apply once a stage completes.</p>
     <div class="grid cards3" id="teamCards"></div>
   </section>
 
@@ -407,7 +407,7 @@
 const DATA = __DATA__;
 /* ====================== ENGINE ====================== */
 const DBL_GROUPS = [9,10,11,12];
-const ADV = {R32:0, R16:16, QF:24, SF:32, F:48, W:64}; // furthest-round milestone (non-cumulative)
+const ADV = {R32:0, R16:16, QF:24, SF:32, F:48, W:64}; // per-round milestone (awarded cumulatively as a team advances)
 const FINISH = {1:8, 2:4, 3:2, 0:0}; // 3rd only if advanced
 const norm = s => (s||'').trim();
 
@@ -469,12 +469,14 @@ function koReach(team, matches){
   return {best, inR32, wonFinal};
 }
 function advFor(kr){
-  if(kr.wonFinal) return ADV.W;
-  if(kr.best>=KO_RANK.FINAL) return ADV.F;
-  if(kr.best>=KO_RANK.SF) return ADV.SF;
-  if(kr.best>=KO_RANK.QF) return ADV.QF;
-  if(kr.best>=KO_RANK.R16) return ADV.R16;
-  return 0;
+  // cumulative: a team collects every milestone up to the round it reached
+  let s=0, b = kr.wonFinal ? KO_RANK.FINAL : kr.best;
+  if(b>=KO_RANK.R16)   s+=ADV.R16;   // 16
+  if(b>=KO_RANK.QF)    s+=ADV.QF;    // +24
+  if(b>=KO_RANK.SF)    s+=ADV.SF;    // +32
+  if(b>=KO_RANK.FINAL) s+=ADV.F;     // +48
+  if(kr.wonFinal)      s+=ADV.W;     // +64 champion
+  return s;
 }
 function isEliminated(team, matches){
   let lost=false;
@@ -506,8 +508,8 @@ function teamScore(team, matches){
     else if(pos===3) finishBonus = kr.inR32 ? FINISH[3] : 0;
   }
   advBonus = advFor(kr);
-  const base = goals+gpts+finishBonus+advBonus;
-  return {team, group:g, mult, goals, gpts, finishBonus, advBonus, base, total:base*mult, pld, pos, groupDone, kr};
+  const base = gpts+finishBonus+advBonus;              // doubled portion for groups 9-12
+  return {team, group:g, mult, goals, gpts, finishBonus, advBonus, base, total:base*mult + goals, pld, pos, groupDone, kr}; // goals count once (not doubled)
 }
 
 function portfolioScore(picks, matches){
@@ -678,7 +680,7 @@ function renderTeams(){
       <table class="grp-table" style="margin:6px 0"><tbody>${tbl.map(r=>`<tr class="${r.team===b.team?'grp-mine':''}">
         <td class="pos">${r.pos}</td><td>${flag(r.team)} ${r.team}</td>
         <td class="num">${r.pld}</td><td class="num">${r.gd>0?'+':''}${r.gd}</td><td class="num"><b>${r.pts}</b></td></tr>`).join('')}</tbody></table>
-      <div class="bigbreak">Breakdown: ${b.goals} goals${dbl?' ×2':''} + ${b.gpts} group pts${dbl?' ×2':''}${b.finishBonus?` + ${b.finishBonus} finish`:''}${b.advBonus?` + ${b.advBonus} advance`:''} = <b>${b.total}</b></div>
+      <div class="bigbreak">Breakdown: ${b.goals} goals + ${dbl?'(':''}${b.gpts} group pts${b.finishBonus?` + ${b.finishBonus} finish`:''}${b.advBonus?` + ${b.advBonus} advance`:''}${dbl?') ×2':''} = <b>${b.total}</b></div>
       <div class="fxlist">${fxHtml}</div>
     </div>`;}).join('');
 }
