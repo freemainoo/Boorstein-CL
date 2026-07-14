@@ -1759,8 +1759,8 @@
       "home": "France",
       "away": "Spain",
       "hs": 0,
-      "as": 1,
-      "status": "scheduled",
+      "as": 2,
+      "status": "final",
       "pk": false,
       "pkWinner": null
     },
