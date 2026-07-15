@@ -58,9 +58,9 @@ worldcup-tracker/
 Per team: **1**/goal · **1**/group-stage point (3 win / 1 draw) ·
 **+8** win group / **+4** 2nd / **+2** advance as a 3rd-place team ·
 knockout milestones (awarded **cumulatively**) **+16** R16 · **+24** QF · **+32** SF · **+48** final · **+64** champion — e.g. a semifinalist has earned 16+24+32 = 72.
-**Teams in ability-groups 9–12 double their group points, finish bonus, and advancement bonus — goals are counted once (not doubled).**
+**Teams in ability-groups 9–12 score double — goals, group points, finish bonus, and advancement bonus are all ×2.**
 
-> Verified against the organizer's post-quarterfinal sheet: the engine reproduces the official **Points** column (group + finish + cumulative advancement, ×2 for groups 9–12) **exactly** for every entrant. Goals are counted once and track the sheet within a few (knockout extra-time/penalty goal accounting in the data feed).
+> Verified against the organizer's post-quarterfinal sheet: the engine reproduces the official **per-team Points and Goals exactly for all 48 teams** (everything ×2 for groups 9–12; advancement cumulative; penalty-shootout games pinned to their regulation score via `PK_REGULATION`).
 
 ### Updating match results / knockouts
 - Quick edits: use the **Enter Results** tab in the dashboard (saved in your browser).

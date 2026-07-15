@@ -1342,8 +1342,8 @@
       "venue": "",
       "home": "Germany",
       "away": "Paraguay",
-      "hs": 4,
-      "as": 5,
+      "hs": 1,
+      "as": 1,
       "status": "final",
       "pk": true,
       "pkWinner": "Paraguay"
@@ -1358,8 +1358,8 @@
       "venue": "",
       "home": "Netherlands",
       "away": "Morocco",
-      "hs": 3,
-      "as": 4,
+      "hs": 1,
+      "as": 1,
       "status": "final",
       "pk": true,
       "pkWinner": "Morocco"
@@ -1518,8 +1518,8 @@
       "venue": "",
       "home": "Australia",
       "away": "Egypt",
-      "hs": 3,
-      "as": 5,
+      "hs": 1,
+      "as": 1,
       "status": "final",
       "pk": true,
       "pkWinner": "Egypt"
@@ -1678,8 +1678,8 @@
       "venue": "",
       "home": "Switzerland",
       "away": "Colombia",
-      "hs": 4,
-      "as": 3,
+      "hs": 0,
+      "as": 0,
       "status": "final",
       "pk": true,
       "pkWinner": "Switzerland"

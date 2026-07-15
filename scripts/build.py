@@ -209,6 +209,19 @@ def load_overrides():
             print("  ! results.json unreadable, using seed:", e)
     return results, knockout
 
+# Penalty-shootout goal fix. The live feed records the SHOOTOUT tally as the match
+# score (e.g. Germany "4-5" Paraguay), but for scoring only regulation goals count and a
+# shootout is by definition a level draw. football-data's fullTime is unreliable for these,
+# so we pin the regulation score here (verified exactly against the organizer's per-team
+# Goals). Keyed by the two teams (order-independent); value = the level score each side had.
+# ADD any new penalty-shootout game here as the knockouts progress.
+PK_REGULATION = {
+    frozenset({"Germany", "Paraguay"}):    1,   # 1-1, Paraguay on pens
+    frozenset({"Netherlands", "Morocco"}): 1,   # 1-1, Morocco on pens
+    frozenset({"Australia", "Egypt"}):     1,   # 1-1, Egypt on pens
+    frozenset({"Switzerland", "Colombia"}):0,   # 0-0, Switzerland on pens
+}
+
 def build_matches(results, knockout):
     matches = []
     for (num,grp,md,date,venue,home,away) in GROUP_SCHEDULE:
@@ -222,11 +235,15 @@ def build_matches(results, knockout):
         rnd = k.get("round","R32")
         ha = "".join(c for c in "_".join(sorted([str(k.get("home")), str(k.get("away"))]))
                      if c.isalnum() or c=="_")
+        hs, as_ = k.get("hs"), k.get("as")
+        if k.get("pkWinner"):  # override feed's shootout tally with true regulation score
+            lvl = PK_REGULATION.get(frozenset({k.get("home"), k.get("away")}))
+            if lvl is not None: hs = as_ = lvl
         matches.append({
             "id": f"k_{rnd}_{ha}", "num": 900+i, "grp": None, "round": rnd, "md": None,
             "date": k.get("date") or ROUND_DATE.get(rnd,""), "venue": k.get("venue",""),
             "home": k.get("home"), "away": k.get("away"),
-            "hs": k.get("hs"), "as": k.get("as"),
+            "hs": hs, "as": as_,
             "status": k.get("status","scheduled"),
             "pk": bool(k.get("pkWinner")), "pkWinner": k.get("pkWinner"),
         })

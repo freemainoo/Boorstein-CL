@@ -245,7 +245,7 @@
   <!-- MY TEAMS -->
   <section class="view" id="v-teams">
     <h2 class="sec">Your 12 picks — live breakdown</h2>
-    <p class="muted" style="margin-top:-4px;font-size:13px">Points = goals (counted once) + (group points + finish bonus + advancement bonus) ×2 for ability-groups 9–12. Bonuses apply once a stage completes.</p>
+    <p class="muted" style="margin-top:-4px;font-size:13px">Points = (goals + group points + finish bonus + advancement bonus), all ×2 for ability-groups 9–12. Bonuses apply once a stage completes.</p>
     <div class="grid cards3" id="teamCards"></div>
   </section>
 
@@ -508,8 +508,8 @@ function teamScore(team, matches){
     else if(pos===3) finishBonus = kr.inR32 ? FINISH[3] : 0;
   }
   advBonus = advFor(kr);
-  const base = gpts+finishBonus+advBonus;              // doubled portion for groups 9-12
-  return {team, group:g, mult, goals, gpts, finishBonus, advBonus, base, total:base*mult + goals, pld, pos, groupDone, kr}; // goals count once (not doubled)
+  const base = goals+gpts+finishBonus+advBonus;
+  return {team, group:g, mult, goals, gpts, finishBonus, advBonus, base, total:base*mult, pld, pos, groupDone, kr}; // everything (incl. goals) doubles for groups 9-12
 }
 
 function portfolioScore(picks, matches){
@@ -680,7 +680,7 @@ function renderTeams(){
       <table class="grp-table" style="margin:6px 0"><tbody>${tbl.map(r=>`<tr class="${r.team===b.team?'grp-mine':''}">
         <td class="pos">${r.pos}</td><td>${flag(r.team)} ${r.team}</td>
         <td class="num">${r.pld}</td><td class="num">${r.gd>0?'+':''}${r.gd}</td><td class="num"><b>${r.pts}</b></td></tr>`).join('')}</tbody></table>
-      <div class="bigbreak">Breakdown: ${b.goals} goals + ${dbl?'(':''}${b.gpts} group pts${b.finishBonus?` + ${b.finishBonus} finish`:''}${b.advBonus?` + ${b.advBonus} advance`:''}${dbl?') ×2':''} = <b>${b.total}</b></div>
+      <div class="bigbreak">Breakdown: ${dbl?'(':''}${b.goals} goals + ${b.gpts} group pts${b.finishBonus?` + ${b.finishBonus} finish`:''}${b.advBonus?` + ${b.advBonus} advance`:''}${dbl?') ×2':''} = <b>${b.total}</b></div>
       <div class="fxlist">${fxHtml}</div>
     </div>`;}).join('');
 }

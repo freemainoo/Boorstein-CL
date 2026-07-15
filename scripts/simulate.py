@@ -133,7 +133,7 @@ def team_fixed_adv(team, matches):
         if pos==1: finish=FINISH[1]
         elif pos==2: finish=FINISH[2]
         elif pos==3: finish=FINISH[3] if inR32 else 0
-    return gpts+finish, adv_for(best,wonF), mult, goals   # goals returned separately (counted once, not doubled)
+    return goals+gpts+finish, adv_for(best,wonF), mult   # all of it doubles for groups 9-12
 
 ROUND_NAME={"R16":"Round of 16","QF":"Quarter-finals","SF":"Semi-finals","FINAL":"Final"}
 
@@ -142,7 +142,7 @@ def compute(matches, entrants, my_entry="Debiche", eg_goals=1.3, board_n=18, det
     B,W,R=resolve_bracket(matches)
     tinfo={t:team_fixed_adv(t,matches) for t in team_group}
     entrants=[dict(e) for e in entrants]
-    for e in entrants: e["cur"]=sum((tinfo[t][0]+tinfo[t][1])*tinfo[t][2] + tinfo[t][3] for t in e["picks"])  # (gpts+finish+adv)*mult + goals
+    for e in entrants: e["cur"]=sum((tinfo[t][0]+tinfo[t][1])*tinfo[t][2] for t in e["picks"])  # (goals+gpts+finish+adv)*mult
     entrants.sort(key=lambda e:(-e["cur"],-e.get("goalsPred",0)))
     for i,e in enumerate(entrants): e["rank"]=i+1
     ename={e["name"]:e for e in entrants}
@@ -199,7 +199,7 @@ def compute(matches, entrants, my_entry="Debiche", eg_goals=1.3, board_n=18, det
                 adv[t]=adv_for(best,wonF); fut[t]=games
             b1=(-1,None);b2=(-1,None); vals={}
             for e in entrants:
-                val=e["cur"]+sum((adv[t]-ca)*mu + eg*fut[t] for (t,mu,ca) in e["ap"]); vals[e["name"]]=val   # advancement doubles; future goals count once
+                val=e["cur"]+sum((adv[t]-ca+eg*fut[t])*mu for (t,mu,ca) in e["ap"]); vals[e["name"]]=val   # advancement + future goals both double
                 if val>ceiling.get(e["name"],-1): ceiling[e["name"]]=val
                 if val<floor.get(e["name"],10**9): floor[e["name"]]=val
                 if val>b1[0]: b2=b1;b1=(val,e["name"])
