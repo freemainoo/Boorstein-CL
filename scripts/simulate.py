@@ -133,7 +133,7 @@ def team_fixed_adv(team, matches):
         if pos==1: finish=FINISH[1]
         elif pos==2: finish=FINISH[2]
         elif pos==3: finish=FINISH[3] if inR32 else 0
-    return goals+gpts+finish, adv_for(best,wonF), mult   # all of it doubles for groups 9-12
+    return goals+gpts+finish, adv_for(best,wonF), mult, goals   # 4th=raw goals (for the Points/Goals display split only)
 
 ROUND_NAME={"R16":"Round of 16","QF":"Quarter-finals","SF":"Semi-finals","FINAL":"Final"}
 
@@ -143,6 +143,8 @@ def compute(matches, entrants, my_entry="Debiche", eg_goals=1.3, board_n=18, det
     tinfo={t:team_fixed_adv(t,matches) for t in team_group}
     entrants=[dict(e) for e in entrants]
     for e in entrants: e["cur"]=sum((tinfo[t][0]+tinfo[t][1])*tinfo[t][2] for t in e["picks"])  # (goals+gpts+finish+adv)*mult
+    for e in entrants:                                    # display split (Score = Points + Goals, both ×2 for 9-12)
+        e["goalPts"]=sum(tinfo[t][3]*tinfo[t][2] for t in e["picks"]); e["points"]=e["cur"]-e["goalPts"]
     entrants.sort(key=lambda e:(-e["cur"],-e.get("goalsPred",0)))
     for i,e in enumerate(entrants): e["rank"]=i+1
     ename={e["name"]:e for e in entrants}
@@ -315,7 +317,7 @@ def compute(matches, entrants, my_entry="Debiche", eg_goals=1.3, board_n=18, det
     picked=[e["name"] for e in order[:board_n]]
     for nm in (picked + [my_entry] if (my_entry in ename and my_entry not in picked) else picked):
         e=ename[nm]; row={
-            "name":nm,"rank":e["rank"],"cur":e["cur"],
+            "name":nm,"rank":e["rank"],"cur":e["cur"],"points":e["points"],"goalPts":e["goalPts"],
             "even":round(r0["s_first"].get(nm,0)/N,4),
             "eg":round(rG["s_first"].get(nm,0)/max(rG["N"],1),4),
             "model":round(r0["w_first"].get(nm,0),4),

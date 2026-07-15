@@ -277,10 +277,12 @@
       <table id="boardTable">
         <thead><tr>
           <th data-k="rank">#</th><th data-k="name">Entrant</th>
-          <th data-k="live" class="num">Live</th>
-          <th data-k="score" class="num">Official</th>
+          <th data-k="points" class="num">Points</th>
+          <th data-k="goalPts" class="num">Goals</th>
+          <th data-k="live" class="num">Score</th>
+          <th data-k="score" class="num">Sheet</th>
           <th data-k="overlap" class="num">Shared</th>
-          <th data-k="goalsPred" class="num">Goals (TB)</th>
+          <th data-k="goalsPred" class="num">Goal Pred</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -513,13 +515,14 @@ function teamScore(team, matches){
 }
 
 function portfolioScore(picks, matches){
-  let total=0, goals=0, dbl=0, alive=0, breakdown=[];
+  let total=0, goals=0, goalPts=0, dbl=0, alive=0, breakdown=[];
   picks.forEach(t=>{
     const s=teamScore(t,matches); breakdown.push(s);
-    total+=s.total; goals+=s.goals; if(s.mult===2)dbl+=s.total;
+    total+=s.total; goals+=s.goals; goalPts+=s.goals*s.mult; if(s.mult===2)dbl+=s.total;
     if(!isEliminated(t,matches)) alive++;
   });
-  return {total,goals,dbl,alive,breakdown};
+  // matches the organizer's sheet: Score = Points (non-goal, doubled for 9-12) + Goals (doubled for 9-12)
+  return {total,goals,goalPts,points:total-goalPts,dbl,alive,breakdown};
 }
 
 /* ====================== STATE ====================== */
@@ -586,7 +589,7 @@ const flag=t=>FLAGS[t]||'⚽';
 let charts={};
 
 function rankings(){
-  const arr=ENTRANTS.map(e=>({...e, overlap:overlapWith(e.picks), live:portfolioScore(e.picks,MATCHES).total}));
+  const arr=ENTRANTS.map(e=>{const ps=portfolioScore(e.picks,MATCHES); return {...e, overlap:overlapWith(e.picks), live:ps.total, points:ps.points, goalPts:ps.goalPts};});
   arr.sort((a,b)=> b.live-a.live || b.sheetScore-a.sheetScore || a.name.localeCompare(b.name));
   let rank=0,prev=null,seen=0;
   arr.forEach(e=>{ seen++; if(e.live!==prev){rank=seen;prev=e.live;} e.rank=rank; });
@@ -598,7 +601,7 @@ function renderHeader(){
   const ps=portfolioScore(MYPICKS,MATCHES);
   document.getElementById('kRank').textContent='#'+me.rank;
   document.getElementById('kScore').textContent=me.live;
-  document.getElementById('kGoals').textContent=ps.goals;
+  document.getElementById('kGoals').textContent=ps.goalPts;
   document.getElementById('kAlive').textContent=ps.alive+'/12';
   document.getElementById('kDbl').textContent=ps.dbl;
   // standing box
@@ -648,7 +651,7 @@ function renderOverview(){
         <span class="tag grp">Ability G${b.group}</span>
         <span class="tag grp">WC ${teamReal[b.team]}</span>
         ${dbl?'<span class="tag dbl">2× points</span>':''}</div>
-      <div class="bigbreak" style="margin-top:8px">${b.goals} goals · ${b.gpts} grp pts${b.finishBonus?` · +${b.finishBonus}`:''}${b.advBonus?` · +${b.advBonus} adv`:''}</div>
+      <div class="bigbreak" style="margin-top:8px">Pts <b>${b.total-b.goals*b.mult}</b> · Goals <b>${b.goals*b.mult}</b> · Score <b>${b.total}</b></div>
     </div>`;}).join('');
 }
 
@@ -677,6 +680,7 @@ function renderTeams(){
       <div style="margin:8px 0;display:flex;gap:6px;flex-wrap:wrap">
         <span class="tag grp">Ability G${b.group}</span><span class="tag grp">WC Group ${L}</span>
         ${dbl?'<span class="tag dbl">2× points</span>':''}${posTag}</div>
+      <div class="bigbreak" style="margin:2px 0 6px">Points <b>${b.total-b.goals*b.mult}</b> · Goals <b>${b.goals*b.mult}</b> · Score <b>${b.total}</b></div>
       <table class="grp-table" style="margin:6px 0"><tbody>${tbl.map(r=>`<tr class="${r.team===b.team?'grp-mine':''}">
         <td class="pos">${r.pos}</td><td>${flag(r.team)} ${r.team}</td>
         <td class="num">${r.pld}</td><td class="num">${r.gd>0?'+':''}${r.gd}</td><td class="num"><b>${r.pts}</b></td></tr>`).join('')}</tbody></table>
@@ -779,8 +783,10 @@ function renderBoard(){
     const cls=e.name===ME?'me':(e.overlap>=11?'twin':'');
     const diff=e.live-e.sheetScore;
     return `<tr class="${cls}"><td>${e.rank}</td><td>${e.name}${e.name===ME?' ⬅ you':''}</td>
-      <td class="num"><b>${e.live}</b>${diff?` <span style="color:var(--accent);font-size:10px">▲${diff}</span>`:''}</td>
-      <td class="num muted">${e.sheetScore}</td>
+      <td class="num">${e.points}</td>
+      <td class="num">${e.goalPts}</td>
+      <td class="num"><b>${e.live}</b></td>
+      <td class="num muted">${e.sheetScore}${diff?` <span style="color:var(--warn);font-size:10px" title="our Score vs the sheet">Δ${diff>0?'+':''}${diff}</span>`:''}</td>
       <td class="num">${e.overlap}/12</td>
       <td class="num">${e.goalsPred}</td></tr>`;}).join('');
 }
@@ -1015,7 +1021,7 @@ function renderTRBoard(){
     return `<div class="trrow ${dead?'dead':''} ${me?'me':''}">
       <span class="trk">${r.rank}</span>
       <span class="trn">${r.name}${me?' ★':''}</span>
-      <span class="trpts">${r.cur}</span>
+      <span class="trpts" title="Points ${r.points} + Goals ${r.goalPts} = ${r.cur}">${r.cur}</span>
       <span class="trtrack"><span class="trfill" style="width:${dead?0:Math.round(p/mx*100)}%"></span></span>
       <span class="trpct">${dead?'—':trPct(p)+'%'}</span>
       ${tag}
@@ -1027,8 +1033,8 @@ function renderContender(name){
   const TR=DATA.titleRace; const r=TR.board.find(x=>x.name===name); if(!r) return;
   const stat=document.getElementById('trPickStat');
   stat.innerHTML = r.alive
-    ? `even <b>${trPct(r.even)}%</b> · model <b>${trPct(r.model)}%</b> · rank ${r.rank} · ${r.cur} pts · top-2 ${trPct0(r.top2)}% · finishes above ${TR.leader} in <b>${trPct0(r.beat)}%</b>`
-    : `<span style="color:var(--warn)">Eliminated from 1st</span> · rank ${r.rank} · ${r.cur} pts · still top-2 in ${trPct0(r.top2)}%`;
+    ? `even <b>${trPct(r.even)}%</b> · model <b>${trPct(r.model)}%</b> · rank ${r.rank} · <b>${r.points}</b> pts + <b>${r.goalPts}</b> goals = <b>${r.cur}</b> · top-2 ${trPct0(r.top2)}% · finishes above ${TR.leader} in <b>${trPct0(r.beat)}%</b>`
+    : `<span style="color:var(--warn)">Eliminated from 1st</span> · rank ${r.rank} · ${r.points} pts + ${r.goalPts} goals = ${r.cur} · still top-2 in ${trPct0(r.top2)}%`;
   if(!r.alive || !r.rooting){ document.getElementById('trContender').innerHTML=
     `<div class="note">This entry can no longer finish 1st in any remaining bracket outcome. Ceiling ${r.ceil}, floor ${r.floor}.</div>`; return; }
   const root=r.rooting.filter(x=>x.delta>0.004).map(x=>
