@@ -1041,7 +1041,7 @@ function renderContender(name){
     `<div class="root"><span class="rt ${x.own?'own':''}">${flag(x.team)} ${x.team}${x.own?' ★':''} <span class="lp">over ${x.vs}</span></span><span class="rd">+${trPct0(x.delta)}%</span></div>`
   ).join('') || '<div class="lp">Indifferent — no game moves your odds much.</div>';
   const need = r.necessary.length
-    ? r.necessary.map(c=>`<div class="cond">✓ <b>${c.team}</b> must beat ${c.vs}</div>`).join('')
+    ? r.necessary.map(c=>`<div class="cond">✓ <b>${c.team}</b> ${c.vs?('must beat '+flag(c.vs)+' '+c.vs):('must win the '+c.round)}</div>`).join('')
     : '<div class="cond lp">No single must-win — multiple paths keep you alive.</div>';
   document.getElementById('trContender').innerHTML = `
     <div class="tr-cbox">

@@ -256,34 +256,40 @@ def compute(matches, entrants, my_entry="Debiche", eg_goals=1.3, board_n=18, det
         wins=[adv for w,c,adv in leaves if c==C]
         if not wins: return []
         conds=[]
-        for r in nextg:
+        for r in undecided:                          # every remaining game, not just the next one
             i=idx[r]; s={adv[i] for adv in wins}
             if len(s)==1:
-                tm=next(iter(s)); other=B[r]["t2"] if tm==B[r]["t1"] else B[r]["t1"]
-                conds.append({"team":tm,"vs":other})
+                tm=next(iter(s)); t1,t2=B[r]["t1"],B[r]["t2"]
+                other=t2 if tm==t1 else t1            # None when the opponent isn't determined yet
+                conds.append({"team":tm,"vs":other,"round":ROUND_NAME.get(B[r]["round"],B[r]["round"])})
         return conds
 
-    def build_tree(C, depth=3):
+    def build_tree(C, depth=None):
         if r0["s_first"].get(C,0)==0: return None
+        if depth is None: depth=min(len(undecided), 6)   # deep enough to reach the final when few games remain
         picks=set(ename[C]["picks"])
-        def rec(constraints, remaining, d):
+        def rec(constraints, d):
+            # games that are decidable now: both participants known (via propagation) and not yet fixed
+            nodes=propagate(constraints)
+            ready=[(n, nodes[n]["t1"], nodes[n]["t2"]) for n in undecided
+                   if n not in constraints and nodes[n]["t1"] and nodes[n]["t2"]]
             best=None
-            for r in remaining:
-                A,Bt=gmatch[r]; pa=cond(C,{**constraints,r:A}); pb=cond(C,{**constraints,r:Bt})
+            for (r,A,Bt) in ready:
+                pa=cond(C,{**constraints,r:A}); pb=cond(C,{**constraints,r:Bt})
                 lev=abs(pa-pb)
                 if best is None or lev>best[0]: best=(lev,r,A,Bt,pa,pb)
             if best is None: return None
             lev,r,A,Bt,pa,pb=best
             if lev<1e-9: return None
-            rem2=[x for x in remaining if x!=r]; br=[]
+            br=[]
             for tm,p in sorted(((A,pa),(Bt,pb)),key=lambda x:-x[1]):
                 dead=p<=1e-9; clinch=abs(p-1)<1e-9; child=None
-                if not dead and not clinch and d>1 and rem2:
-                    child=rec({**constraints,r:tm}, rem2, d-1)
+                if not dead and not clinch and d>1:
+                    child=rec({**constraints,r:tm}, d-1)   # propagation reveals the next game (e.g. the final)
                 br.append({"team":tm,"own":tm in picks,"pct":round(p,4),
                            "dead":dead,"clinch":clinch,"child":child})
             return {"a":A,"b":Bt,"branches":br}
-        return rec({}, list(nextg), depth)
+        return rec({}, depth)
 
     # decisive games (swing = total-variation change in champion distribution)
     games=[]
