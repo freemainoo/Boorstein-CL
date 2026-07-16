@@ -1779,6 +1779,38 @@
       "status": "final",
       "pk": false,
       "pkWinner": null
+    },
+    {
+      "id": "k_BRONZE_England_France",
+      "num": 930,
+      "grp": null,
+      "round": "BRONZE",
+      "md": null,
+      "date": "2026-07-18",
+      "venue": "",
+      "home": "France",
+      "away": "England",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
+    },
+    {
+      "id": "k_FINAL_Argentina_Spain",
+      "num": 931,
+      "grp": null,
+      "round": "FINAL",
+      "md": null,
+      "date": "2026-07-19",
+      "venue": "",
+      "home": "Spain",
+      "away": "Argentina",
+      "hs": null,
+      "as": null,
+      "status": "scheduled",
+      "pk": false,
+      "pkWinner": null
     }
   ],
   "flags": {
