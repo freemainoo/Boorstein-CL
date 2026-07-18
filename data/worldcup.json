@@ -1790,8 +1790,8 @@
       "venue": "",
       "home": "France",
       "away": "England",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 4,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null

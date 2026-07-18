@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-18T21:01:34.389693+00:00",
+  "updated": "2026-07-18T22:02:12.941310+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -596,8 +596,8 @@
       "round": "BRONZE",
       "home": "France",
       "away": "England",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 4,
       "status": "scheduled",
       "pkWinner": null,
       "date": "2026-07-18"
