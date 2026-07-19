@@ -1806,8 +1806,8 @@
       "venue": "",
       "home": "Spain",
       "away": "Argentina",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 0,
       "status": "scheduled",
       "pk": false,
       "pkWinner": null

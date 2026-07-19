@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-19T17:11:48.331118+00:00",
+  "updated": "2026-07-19T19:21:29.457111+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -606,8 +606,8 @@
       "round": "FINAL",
       "home": "Spain",
       "away": "Argentina",
-      "hs": null,
-      "as": null,
+      "hs": 0,
+      "as": 0,
       "status": "scheduled",
       "pkWinner": null,
       "date": "2026-07-19"
