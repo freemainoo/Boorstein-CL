@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-19T22:06:33.832452+00:00",
+  "updated": "2026-07-19T23:10:02.015125+00:00",
   "source": "football-data.org",
   "results": {
     "1": [
@@ -608,7 +608,7 @@
       "away": "Argentina",
       "hs": 1,
       "as": 0,
-      "status": "scheduled",
+      "status": "final",
       "pkWinner": null,
       "date": "2026-07-19"
     }
