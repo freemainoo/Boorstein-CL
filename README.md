@@ -1,7 +1,7 @@
 # ⚽ World Cup Pick'em — Portfolio Tracker
 
 A self-contained dashboard for tracking your entry in the **2026 World Cup Challenge**
-(Tom Boorstein's pick-a-team-from-each-of-12-ability-groups pool). Built for entry **Debiche**.
+(Tom Boorstein's pick-a-team-from-each-of-12-ability-groups pool). 
 
 ## What it shows
 
